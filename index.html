@@ -2,20 +2,15 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-fullscreen">
-    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Para Lidy ❤️ | 14 de Febrero 2026</title>
+    <meta name="description" content="Un regalo especial para Lidy">
     <style>
-        /* ============================================
-           RESET Y CONFIGURACIÓN BASE
-        ============================================ */
+        /* Reset y base */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
         }
 
         :root {
@@ -27,20 +22,26 @@
             --gold: #ffd700;
         }
 
-        html, body {
-            width: 100%;
-            height: 100dvh;
-            overflow: hidden;
-            position: fixed;
+        body {
             font-family: 'Georgia', 'Times New Roman', serif;
+            overflow-x: hidden;
             background: var(--dark);
             color: #fff;
-            touch-action: manipulation;
+            line-height: 1.6;
         }
 
-        /* ============================================
-           FONDO ANIMADO
-        ============================================ */
+        /* Canvas de partículas */
+        #particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* Fondo animado */
         .background {
             position: fixed;
             top: 0;
@@ -52,128 +53,77 @@
                 var(--dark) 0%, 
                 var(--wine) 50%, 
                 #1a0a14 100%);
-            animation: bgPulse 15s ease-in-out infinite;
+            animation: bgShift 20s ease-in-out infinite;
         }
 
-        @keyframes bgPulse {
-            0%, 100% { 
-                background: linear-gradient(135deg, var(--dark) 0%, var(--wine) 50%, #1a0a14 100%);
-            }
-            50% { 
-                background: linear-gradient(135deg, #1a0a14 0%, var(--wine) 50%, var(--dark) 100%);
-            }
+        @keyframes bgShift {
+            0%, 100% { filter: hue-rotate(0deg); }
+            50% { filter: hue-rotate(20deg); }
         }
 
-        /* ============================================
-           CANVAS DE PARTÍCULAS
-        ============================================ */
-        #particles {
+        /* Contenedor principal */
+        .container {
+            position: relative;
+            z-index: 2;
+            min-height: 100vh;
+        }
+
+        /* Pantalla de bienvenida */
+        #welcome-screen {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            pointer-events: none;
-            z-index: 1;
-        }
-
-        /* ============================================
-           CONTROL DE AUDIO
-        ============================================ */
-        .audio-control {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            z-index: 9999;
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            background: rgba(255, 23, 68, 0.3);
-            backdrop-filter: blur(10px);
-            border: 2px solid var(--rose);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            font-size: 1.5rem;
-            transition: all 0.3s ease;
-            opacity: 0;
-        }
-
-        .audio-control.visible {
-            opacity: 1;
-        }
-
-        .audio-control:hover {
-            transform: scale(1.1);
-            box-shadow: 0 0 20px rgba(255, 23, 68, 0.6);
-        }
-
-        /* ============================================
-           CONTENEDORES DE SECCIONES
-        ============================================ */
-        .section {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100dvh;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            padding: 2rem;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 1s ease;
-            z-index: 10;
-        }
-
-        .section.active {
-            opacity: 1;
-            pointer-events: all;
-        }
-
-        /* ============================================
-           PANTALLA DE BIENVENIDA
-        ============================================ */
-        #welcome {
             text-align: center;
+            padding: 20px;
+            z-index: 1000;
+            background: linear-gradient(135deg, var(--dark), var(--wine));
+            transition: opacity 1s ease, transform 1s ease;
+        }
+
+        #welcome-screen.hidden {
+            opacity: 0;
+            transform: scale(1.1);
+            pointer-events: none;
         }
 
         .welcome-title {
-            font-size: clamp(2.5rem, 10vw, 5rem);
+            font-size: clamp(2rem, 8vw, 4rem);
+            font-weight: 300;
             margin-bottom: 2rem;
-            animation: fadeInScale 1.5s ease forwards;
-            text-shadow: 0 0 30px rgba(255, 64, 129, 0.6);
+            opacity: 0;
+            animation: fadeInUp 1.5s ease forwards;
+            text-shadow: 0 0 20px rgba(255, 64, 129, 0.5);
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
         }
 
         .welcome-subtitle {
             font-size: clamp(1.2rem, 4vw, 2rem);
             margin-bottom: 3rem;
+            opacity: 0;
+            animation: fadeInUp 1.5s ease 0.5s forwards;
             font-style: italic;
             color: var(--rose);
-            animation: fadeInScale 1.5s ease 0.5s forwards;
-            opacity: 0;
         }
 
-        @keyframes fadeInScale {
-            from {
-                opacity: 0;
-                transform: scale(0.9);
-            }
-            to {
-                opacity: 1;
-                transform: scale(1);
-            }
-        }
-
-        /* ============================================
-           BOTONES
-        ============================================ */
-        .btn {
+        .start-button {
             padding: 1.5rem 3rem;
-            font-size: clamp(1.1rem, 3vw, 1.4rem);
+            font-size: clamp(1.2rem, 3vw, 1.5rem);
             background: linear-gradient(45deg, var(--primary), var(--secondary));
             border: none;
             border-radius: 50px;
@@ -182,297 +132,255 @@
             font-weight: bold;
             text-transform: uppercase;
             letter-spacing: 2px;
+            opacity: 0;
+            animation: fadeInUp 1.5s ease 1s forwards, pulse 2s ease-in-out 2s infinite;
             box-shadow: 0 0 30px rgba(255, 23, 68, 0.6);
             transition: all 0.3s ease;
             font-family: 'Georgia', serif;
-            animation: pulse 2s ease-in-out infinite;
         }
 
-        .btn:active {
-            transform: scale(0.95);
+        .start-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 50px rgba(255, 23, 68, 0.9);
         }
 
         @keyframes pulse {
-            0%, 100% { 
-                transform: scale(1); 
-                box-shadow: 0 0 30px rgba(255, 23, 68, 0.6);
-            }
-            50% { 
-                transform: scale(1.05); 
-                box-shadow: 0 0 50px rgba(255, 23, 68, 0.9);
-            }
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
         }
 
-        /* ============================================
-           TARJETAS DE REGALOS
-        ============================================ */
-        .gift-container {
-            width: 100%;
-            max-width: 600px;
+        /* Contenido principal */
+        #main-content {
+            opacity: 0;
+            transition: opacity 1.5s ease;
+            padding-top: 100vh;
+        }
+
+        #main-content.visible {
+            opacity: 1;
+        }
+
+        /* Sección hero */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
             text-align: center;
+            padding: 2rem;
         }
 
-        .gift-number {
-            font-size: clamp(3rem, 12vw, 6rem);
-            font-weight: bold;
-            background: linear-gradient(45deg, var(--primary), var(--gold));
+        .hero-title {
+            font-size: clamp(2.5rem, 10vw, 5rem);
+            margin-bottom: 2rem;
+            background: linear-gradient(45deg, var(--rose), var(--gold));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            margin-bottom: 1rem;
-            animation: shimmer 2s ease-in-out infinite;
+            animation: shimmer 3s ease-in-out infinite;
         }
 
         @keyframes shimmer {
             0%, 100% { filter: brightness(1); }
-            50% { filter: brightness(1.5); }
+            50% { filter: brightness(1.3); }
+        }
+
+        /* Tarjetas de regalos */
+        .gift-section {
+            padding: 4rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .gift-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 3rem 2rem;
+            margin: 3rem 0;
+            border: 1px solid rgba(255, 64, 129, 0.2);
+            opacity: 0;
+            transform: translateY(50px) rotateX(10deg);
+            transition: all 0.6s ease;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .gift-card.visible {
+            opacity: 1;
+            transform: translateY(0) rotateX(0);
+        }
+
+        .gift-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 60px rgba(255, 23, 68, 0.3);
+            border-color: var(--rose);
+        }
+
+        .gift-number {
+            font-size: 4rem;
+            font-weight: bold;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
         }
 
         .gift-title {
-            font-size: clamp(2rem, 6vw, 3rem);
-            margin-bottom: 2rem;
+            font-size: clamp(1.8rem, 5vw, 2.5rem);
+            margin-bottom: 1.5rem;
             color: var(--rose);
-            text-shadow: 0 0 20px rgba(255, 64, 129, 0.4);
+            text-shadow: 0 0 10px rgba(255, 64, 129, 0.3);
         }
 
         .gift-description {
-            font-size: clamp(1.3rem, 4vw, 1.8rem);
+            font-size: clamp(1.2rem, 3vw, 1.5rem);
             line-height: 1.8;
             font-style: italic;
-            margin-bottom: 3rem;
-            padding: 0 1rem;
+            color: #f0f0f0;
         }
 
-        .gift-card-wrapper {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(15px);
-            border-radius: 30px;
-            padding: 3rem 2rem;
-            border: 2px solid rgba(255, 64, 129, 0.3);
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
-            animation: cardAppear 1s ease forwards;
-        }
-
-        @keyframes cardAppear {
-            from {
-                opacity: 0;
-                transform: translateY(50px) rotateX(20deg);
-                filter: blur(10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0) rotateX(0);
-                filter: blur(0);
-            }
-        }
-
-        /* ============================================
-           MINI JUEGO - QUIZ
-        ============================================ */
-        .quiz-container {
-            width: 100%;
-            max-width: 700px;
-            text-align: center;
-        }
-
-        .quiz-question {
-            font-size: clamp(1.5rem, 5vw, 2.5rem);
-            margin-bottom: 3rem;
-            color: var(--rose);
-            animation: fadeIn 1s ease;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        .quiz-options {
-            display: grid;
-            gap: 1rem;
-            margin-bottom: 2rem;
-        }
-
-        .quiz-option {
-            padding: 1.5rem;
-            background: rgba(255, 255, 255, 0.1);
-            border: 2px solid rgba(255, 64, 129, 0.3);
-            border-radius: 20px;
-            cursor: pointer;
-            font-size: clamp(1.1rem, 3vw, 1.4rem);
-            transition: all 0.3s ease;
-            backdrop-filter: blur(10px);
-        }
-
-        .quiz-option:hover, .quiz-option:active {
-            background: rgba(255, 64, 129, 0.2);
-            border-color: var(--rose);
-            transform: scale(1.02);
-        }
-
-        .quiz-option.correct {
-            background: linear-gradient(45deg, var(--primary), var(--secondary));
-            border-color: var(--gold);
-            animation: correctAnswer 0.5s ease;
-        }
-
-        @keyframes correctAnswer {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-        }
-
-        .quiz-result {
-            font-size: clamp(1.5rem, 5vw, 2.5rem);
-            color: var(--gold);
-            font-style: italic;
-            margin-top: 2rem;
-            animation: resultGlow 1s ease;
-        }
-
-        @keyframes resultGlow {
-            from {
-                opacity: 0;
-                text-shadow: 0 0 0px rgba(255, 215, 0, 0);
-            }
-            to {
-                opacity: 1;
-                text-shadow: 0 0 30px rgba(255, 215, 0, 0.8);
-            }
-        }
-
-        /* ============================================
-           MINI JUEGO - ATRAPA CORAZONES
-        ============================================ */
-        .catch-game {
-            width: 100%;
-            max-width: 700px;
-            text-align: center;
-        }
-
-        .game-header {
-            font-size: clamp(1.5rem, 5vw, 2.5rem);
-            margin-bottom: 1rem;
-            color: var(--rose);
-        }
-
-        .game-stats {
+        /* Sección final */
+        .finale {
+            min-height: 100vh;
             display: flex;
+            flex-direction: column;
             justify-content: center;
-            gap: 2rem;
-            margin-bottom: 2rem;
-            font-size: clamp(1.2rem, 4vw, 1.8rem);
-        }
-
-        .game-area {
-            position: relative;
-            width: 100%;
-            height: 60vh;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 30px;
-            border: 2px solid rgba(255, 64, 129, 0.3);
-            overflow: hidden;
-            backdrop-filter: blur(10px);
-        }
-
-        .floating-heart {
-            position: absolute;
-            font-size: 2.5rem;
-            cursor: pointer;
-            animation: floatUp 3s linear;
-            user-select: none;
-        }
-
-        @keyframes floatUp {
-            from {
-                transform: translateY(0) rotate(0deg);
-                opacity: 1;
-            }
-            to {
-                transform: translateY(-60vh) rotate(360deg);
-                opacity: 0;
-            }
-        }
-
-        /* ============================================
-           PANTALLA FINAL
-        ============================================ */
-        .finale-container {
+            align-items: center;
             text-align: center;
-            max-width: 800px;
+            padding: 2rem;
+            position: relative;
         }
 
         .finale-title {
-            font-size: clamp(2.5rem, 8vw, 4.5rem);
+            font-size: clamp(2rem, 8vw, 4rem);
             margin-bottom: 2rem;
-            animation: finaleGlow 2s ease-in-out infinite;
-        }
-
-        @keyframes finaleGlow {
-            0%, 100% {
-                text-shadow: 0 0 20px rgba(255, 23, 68, 0.6),
-                             0 0 40px rgba(255, 23, 68, 0.4);
-            }
-            50% {
-                text-shadow: 0 0 40px rgba(255, 23, 68, 1),
-                             0 0 80px rgba(255, 23, 68, 0.6);
-            }
+            opacity: 0;
+            animation: finaleFade 2s ease forwards;
+            text-shadow: 0 0 30px rgba(255, 23, 68, 0.8);
         }
 
         .finale-message {
             font-size: clamp(1.5rem, 5vw, 2.5rem);
             line-height: 1.8;
+            max-width: 800px;
+            opacity: 0;
+            animation: finaleFade 2s ease 0.5s forwards;
             font-style: italic;
-            margin-bottom: 3rem;
         }
 
-        /* ============================================
-           EFECTOS ESPECIALES
-        ============================================ */
-        .confetti-heart {
+        @keyframes finaleFade {
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+        }
+
+        /* Corazones flotantes */
+        .heart {
             position: fixed;
             font-size: 2rem;
+            color: var(--rose);
+            opacity: 0;
             pointer-events: none;
-            z-index: 9998;
-            animation: confettiFall 3s ease-out forwards;
+            animation: floatHeart 4s ease-in-out forwards;
         }
 
-        @keyframes confettiFall {
-            from {
-                transform: translateY(-100px) rotate(0deg);
+        @keyframes floatHeart {
+            0% {
+                opacity: 0;
+                transform: translateY(0) rotate(0deg);
+            }
+            10% {
+                opacity: 0.8;
+            }
+            90% {
+                opacity: 0.8;
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(-100vh) rotate(360deg);
+            }
+        }
+
+        /* Scroll indicator */
+        .scroll-indicator {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 100;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .scroll-indicator.visible {
+            opacity: 1;
+        }
+
+        .scroll-arrow {
+            width: 30px;
+            height: 50px;
+            border: 2px solid var(--rose);
+            border-radius: 25px;
+            position: relative;
+        }
+
+        .scroll-arrow::before {
+            content: '';
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 6px;
+            height: 6px;
+            background: var(--rose);
+            border-radius: 50%;
+            animation: scrollDot 2s ease-in-out infinite;
+        }
+
+        @keyframes scrollDot {
+            0%, 100% {
+                top: 10px;
                 opacity: 1;
             }
-            to {
-                transform: translateY(100vh) rotate(720deg);
-                opacity: 0;
+            50% {
+                top: 30px;
+                opacity: 0.5;
             }
         }
 
-        /* ============================================
-           RESPONSIVE
-        ============================================ */
+        /* Responsive */
         @media (max-width: 768px) {
-            .gift-card-wrapper {
+            .gift-card {
                 padding: 2rem 1.5rem;
+                margin: 2rem 0;
             }
             
-            .btn {
-                padding: 1.2rem 2rem;
-            }
-
-            .game-area {
-                height: 50vh;
+            .gift-number {
+                font-size: 3rem;
             }
         }
 
-        /* ============================================
-           UTILIDADES
-        ============================================ */
-        .hidden {
-            display: none;
+        /* Efectos de glow */
+        .glow {
+            animation: glow 2s ease-in-out infinite;
         }
 
-        .blur-bg {
-            filter: blur(10px);
+        @keyframes glow {
+            0%, 100% {
+                text-shadow: 0 0 10px rgba(255, 64, 129, 0.5),
+                             0 0 20px rgba(255, 64, 129, 0.3);
+            }
+            50% {
+                text-shadow: 0 0 20px rgba(255, 64, 129, 0.8),
+                             0 0 40px rgba(255, 64, 129, 0.5);
+            }
         }
     </style>
 </head>
@@ -483,267 +391,124 @@
     <!-- Canvas de partículas -->
     <canvas id="particles"></canvas>
 
-    <!-- Control de audio -->
-    <div class="audio-control" id="audioControl">
-        <span id="audioIcon">🔊</span>
-    </div>
-
     <!-- Audio oculto -->
-    <audio id="backgroundMusic" preload="auto" loop>
+    <audio id="background-music" preload="auto">
         <source src="track.mp3" type="audio/mpeg">
     </audio>
 
-    <!-- ============================================
-         SECCIÓN 1: BIENVENIDA
-    ============================================ -->
-    <section class="section active" id="welcome">
+    <!-- Pantalla de bienvenida -->
+    <div id="welcome-screen">
         <h1 class="welcome-title">Lidy 💋</h1>
-        <p class="welcome-subtitle">
-            Este 14 de febrero no es cualquier día…<br>
-            Es nuestro día.
-        </p>
-        <button class="btn" id="startBtn">Haz click aquí y prepárate 🔥</button>
-    </section>
+        <p class="welcome-subtitle">Este 14 de febrero no es cualquier día…<br>Es nuestro día.</p>
+        <button class="start-button" id="start-btn">Haz click aquí y prepárate 🔥</button>
+    </div>
 
-    <!-- ============================================
-         SECCIONES DE REGALOS (10)
-    ============================================ -->
-    <section class="section" id="gift1">
-        <div class="gift-container">
-            <div class="gift-card-wrapper">
+    <!-- Contenido principal -->
+    <div id="main-content">
+        <!-- Hero Section -->
+        <section class="hero">
+            <h1 class="hero-title glow">Para Ti, Lidy ❤️</h1>
+        </section>
+
+        <!-- Sección de regalos -->
+        <div class="gift-section">
+            <div class="gift-card" data-index="0">
                 <div class="gift-number">01</div>
                 <h2 class="gift-title">Chocolate Turín Masterpieces</h2>
-                <p class="gift-description">
-                    Los compré porque se ven buenos…<br>
-                    pero tú estás mucho mejor.
-                </p>
+                <p class="gift-description">Los compré porque se ven buenos… pero tú estás mucho mejor.</p>
             </div>
-            <button class="btn" onclick="nextSection()">Descubrir siguiente 💝</button>
-        </div>
-    </section>
 
-    <section class="section" id="gift2">
-        <div class="gift-container">
-            <div class="gift-card-wrapper">
+            <div class="gift-card" data-index="1">
                 <div class="gift-number">02</div>
                 <h2 class="gift-title">Pijama</h2>
-                <p class="gift-description">
-                    Me encanta cuando la usas…<br>
-                    pero más cuando no dura mucho puesta.
-                </p>
+                <p class="gift-description">Me encanta cuando la usas… pero más cuando no dura mucho puesta.</p>
             </div>
-            <button class="btn" onclick="nextSection()">Descubrir siguiente 💝</button>
-        </div>
-    </section>
 
-    <section class="section" id="gift3">
-        <div class="gift-container">
-            <div class="gift-card-wrapper">
+            <div class="gift-card" data-index="2">
                 <div class="gift-number">03</div>
                 <h2 class="gift-title">Peluche Tristeza</h2>
-                <p class="gift-description">
-                    Dicen que se parece a Tristeza…<br>
-                    pero tú eres mi Alegría favorita.
-                </p>
+                <p class="gift-description">Dicen que se parece a Tristeza… pero tú eres mi Alegría favorita.</p>
             </div>
-            <button class="btn" onclick="nextSection()">Descubrir siguiente 💝</button>
-        </div>
-    </section>
 
-    <section class="section" id="gift4">
-        <div class="gift-container">
-            <div class="gift-card-wrapper">
+            <div class="gift-card" data-index="3">
                 <div class="gift-number">04</div>
                 <h2 class="gift-title">Forma Klein</h2>
-                <p class="gift-description">
-                    Como esta forma…<br>
-                    lo nuestro no tiene principio ni fin.
-                </p>
+                <p class="gift-description">Como esta forma… lo nuestro no tiene principio ni fin.</p>
             </div>
-            <button class="btn" onclick="nextSection()">Descubrir siguiente 💝</button>
-        </div>
-    </section>
 
-    <section class="section" id="gift5">
-        <div class="gift-container">
-            <div class="gift-card-wrapper">
+            <div class="gift-card" data-index="4">
                 <div class="gift-number">05</div>
                 <h2 class="gift-title">Calzón</h2>
-                <p class="gift-description">
-                    Porque el arte también se modela…<br>
-                    y tú eres mi obra favorita.
-                </p>
+                <p class="gift-description">Porque el arte también se modela… y tú eres mi obra favorita.</p>
             </div>
-            <button class="btn" onclick="nextSection()">Descubrir siguiente 💝</button>
-        </div>
-    </section>
 
-    <section class="section" id="gift6">
-        <div class="gift-container">
-            <div class="gift-card-wrapper">
+            <div class="gift-card" data-index="5">
                 <div class="gift-number">06</div>
                 <h2 class="gift-title">Crema Tono Natural</h2>
-                <p class="gift-description">
-                    Para que sigas brillando…<br>
-                    aunque ya iluminas todo.
-                </p>
+                <p class="gift-description">Para que sigas brillando… aunque ya iluminas todo.</p>
             </div>
-            <button class="btn" onclick="nextSection()">Descubrir siguiente 💝</button>
-        </div>
-    </section>
 
-    <section class="section" id="gift7">
-        <div class="gift-container">
-            <div class="gift-card-wrapper">
+            <div class="gift-card" data-index="6">
                 <div class="gift-number">07</div>
                 <h2 class="gift-title">Baby Doll</h2>
-                <p class="gift-description">
-                    Espero que te quede perfecto…<br>
-                    aunque sé que lo perfecto ya eres tú.
-                </p>
+                <p class="gift-description">Espero que te quede perfecto… aunque sé que lo perfecto ya eres tú.</p>
             </div>
-            <button class="btn" onclick="nextSection()">Descubrir siguiente 💝</button>
-        </div>
-    </section>
 
-    <section class="section" id="gift8">
-        <div class="gift-container">
-            <div class="gift-card-wrapper">
+            <div class="gift-card" data-index="7">
                 <div class="gift-number">08</div>
                 <h2 class="gift-title">Calcetas Imán</h2>
-                <p class="gift-description">
-                    Porque siempre terminamos juntos…<br>
-                    aunque intentemos separarnos.
-                </p>
+                <p class="gift-description">Porque siempre terminamos juntos… aunque intentemos separarnos.</p>
             </div>
-            <button class="btn" onclick="nextSection()">Descubrir siguiente 💝</button>
-        </div>
-    </section>
 
-    <section class="section" id="gift9">
-        <div class="gift-container">
-            <div class="gift-card-wrapper">
+            <div class="gift-card" data-index="8">
                 <div class="gift-number">09</div>
                 <h2 class="gift-title">Isdin Nails</h2>
-                <p class="gift-description">
-                    Para que tus uñas crezcan…<br>
-                    y me sigas marcando el corazón.
-                </p>
+                <p class="gift-description">Para que tus uñas crezcan… y me sigas marcando el corazón.</p>
             </div>
-            <button class="btn" onclick="nextSection()">Descubrir siguiente 💝</button>
-        </div>
-    </section>
 
-    <section class="section" id="gift10">
-        <div class="gift-container">
-            <div class="gift-card-wrapper">
+            <div class="gift-card" data-index="9">
                 <div class="gift-number">10</div>
                 <h2 class="gift-title">Libro Carpe Diem</h2>
-                <p class="gift-description">
-                    Porque contigo quiero vivir el presente…<br>
-                    una y otra vez.
-                </p>
+                <p class="gift-description">Porque contigo quiero vivir el presente… una y otra vez.</p>
             </div>
-            <button class="btn" onclick="nextSection()">Siguiente sorpresa 🎮</button>
         </div>
-    </section>
 
-    <!-- ============================================
-         MINI JUEGO 1: QUIZ
-    ============================================ -->
-    <section class="section" id="quiz">
-        <div class="quiz-container">
-            <h2 class="quiz-question">¿Qué tanto me conoces, Lidy? 💋</h2>
-            <p style="font-size: 1.5rem; margin-bottom: 2rem; color: var(--rose);">
-                ¿Qué es lo que más me vuelve loco de ti?
-            </p>
-            <div class="quiz-options">
-                <div class="quiz-option" onclick="quizAnswer(false)">Tu sonrisa</div>
-                <div class="quiz-option" onclick="quizAnswer(false)">Tu energía</div>
-                <div class="quiz-option" onclick="quizAnswer(false)">Tus abrazos</div>
-                <div class="quiz-option" onclick="quizAnswer(true)">🔥 Tú sabes cuál 🔥</div>
-            </div>
-            <div id="quizResult"></div>
-        </div>
-    </section>
-
-    <!-- ============================================
-         MINI JUEGO 2: ATRAPA CORAZONES
-    ============================================ -->
-    <section class="section" id="catchGame">
-        <div class="catch-game">
-            <h2 class="game-header">¡Atrapa mi amor! ❤️</h2>
-            <div class="game-stats">
-                <div>Corazones: <span id="score">0</span>/10</div>
-                <div>Tiempo: <span id="timer">15</span>s</div>
-            </div>
-            <div class="game-area" id="gameArea"></div>
-            <div id="gameResult" style="margin-top: 2rem;"></div>
-        </div>
-    </section>
-
-    <!-- ============================================
-         PANTALLA FINAL
-    ============================================ -->
-    <section class="section" id="finale">
-        <div class="finale-container">
+        <!-- Sección final -->
+        <section class="finale">
             <h1 class="finale-title">Lidy…</h1>
             <p class="finale-message">
-                Tu sonrisa me enamora…<br>
-                pero tu energía me enciende.<br><br>
-                <span style="color: var(--gold); font-size: 1.2em;">
-                    Feliz 14 de febrero ❤️🔥
-                </span>
+                Tu sonrisa me enamora… pero tu energía me vuelve loco.<br><br>
+                <span class="glow">Feliz 14 de febrero ❤️🔥</span>
             </p>
-        </div>
-    </section>
+        </section>
+    </div>
+
+    <!-- Scroll indicator -->
+    <div class="scroll-indicator" id="scroll-indicator">
+        <div class="scroll-arrow"></div>
+    </div>
 
     <script>
         // ============================================
-        // VARIABLES GLOBALES
+        // CONFIGURACIÓN Y VARIABLES GLOBALES
         // ============================================
-        const audio = document.getElementById('backgroundMusic');
-        const audioControl = document.getElementById('audioControl');
-        const audioIcon = document.getElementById('audioIcon');
-        const canvas = document.getElementById('particles');
-        const ctx = canvas.getContext('2d');
-        
-        let currentSection = 0;
+        const audio = document.getElementById('background-music');
+        const welcomeScreen = document.getElementById('welcome-screen');
+        const mainContent = document.getElementById('main-content');
+        const startBtn = document.getElementById('start-btn');
+        const scrollIndicator = document.getElementById('scroll-indicator');
+        const SONG_DURATION = 150000; // 2:30 en milisegundos
+
         let hasStarted = false;
-        let isMuted = false;
-        let particles = [];
         let animationFrame;
-        let gameStarted = false;
-        let score = 0;
-        let timeLeft = 15;
-        let gameInterval;
-        let heartInterval;
-
-        const sections = [
-            'welcome', 'gift1', 'gift2', 'gift3', 'gift4', 'gift5',
-            'gift6', 'gift7', 'gift8', 'gift9', 'gift10', 'quiz', 
-            'catchGame', 'finale'
-        ];
-
-        // ============================================
-        // FULLSCREEN
-        // ============================================
-        function enterFullscreen() {
-            const elem = document.documentElement;
-            if (elem.requestFullscreen) {
-                elem.requestFullscreen();
-            } else if (elem.webkitRequestFullscreen) {
-                elem.webkitRequestFullscreen();
-            } else if (elem.mozRequestFullScreen) {
-                elem.mozRequestFullScreen();
-            } else if (elem.msRequestFullscreen) {
-                elem.msRequestFullscreen();
-            }
-        }
 
         // ============================================
         // SISTEMA DE PARTÍCULAS
         // ============================================
+        const canvas = document.getElementById('particles');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+
         function resizeCanvas() {
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
@@ -753,9 +518,9 @@
             constructor() {
                 this.x = Math.random() * canvas.width;
                 this.y = Math.random() * canvas.height;
-                this.size = Math.random() * 2 + 1;
-                this.speedX = Math.random() * 0.5 - 0.25;
-                this.speedY = Math.random() * 0.5 - 0.25;
+                this.size = Math.random() * 3 + 1;
+                this.speedX = Math.random() * 1 - 0.5;
+                this.speedY = Math.random() * 1 - 0.5;
                 this.opacity = Math.random() * 0.5 + 0.2;
             }
 
@@ -779,251 +544,141 @@
 
         function initParticles() {
             particles = [];
-            const count = window.innerWidth < 768 ? 30 : 60;
-            for (let i = 0; i < count; i++) {
+            const particleCount = window.innerWidth < 768 ? 50 : 100;
+            for (let i = 0; i < particleCount; i++) {
                 particles.push(new Particle());
             }
         }
 
         function animateParticles() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            particles.forEach(p => {
-                p.update();
-                p.draw();
+            particles.forEach(particle => {
+                particle.update();
+                particle.draw();
             });
             animationFrame = requestAnimationFrame(animateParticles);
         }
 
         // ============================================
-        // NAVEGACIÓN ENTRE SECCIONES
+        // CORAZONES FLOTANTES
         // ============================================
-        function nextSection() {
-            if (currentSection < sections.length - 1) {
-                document.getElementById(sections[currentSection]).classList.remove('active');
-                currentSection++;
-                
-                // Delay para transición suave
-                setTimeout(() => {
-                    document.getElementById(sections[currentSection]).classList.add('active');
-                    
-                    // Iniciar juegos automáticamente
-                    if (sections[currentSection] === 'catchGame') {
-                        setTimeout(startCatchGame, 1000);
-                    }
-                    
-                    // Confetti en pantalla final
-                    if (sections[currentSection] === 'finale') {
-                        createConfettiRain();
-                    }
-                }, 500);
-            }
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.className = 'heart';
+            heart.textContent = '❤️';
+            heart.style.left = Math.random() * window.innerWidth + 'px';
+            heart.style.bottom = '-50px';
+            document.body.appendChild(heart);
+
+            setTimeout(() => {
+                heart.remove();
+            }, 4000);
+        }
+
+        function startHeartRain() {
+            setInterval(createHeart, 800);
         }
 
         // ============================================
-        // BOTÓN DE INICIO
+        // PAGE VISIBILITY API - PAUSA/REPRODUCCIÓN
         // ============================================
-        document.getElementById('startBtn').addEventListener('click', async () => {
-            if (!hasStarted) {
-                hasStarted = true;
-                
-                // Intentar fullscreen
-                try {
-                    await enterFullscreen();
-                } catch (e) {
-                    console.log('Fullscreen no disponible');
-                }
-                
-                // Reproducir audio
-                try {
-                    await audio.play();
-                    audioControl.classList.add('visible');
-                } catch (e) {
-                    console.log('Error reproduciendo audio:', e);
-                }
-                
-                // Avanzar a primera sección de regalo
-                nextSection();
-            }
-        });
-
-        // ============================================
-        // CONTROL DE AUDIO
-        // ============================================
-        audioControl.addEventListener('click', () => {
-            isMuted = !isMuted;
-            audio.muted = isMuted;
-            audioIcon.textContent = isMuted ? '🔇' : '🔊';
-        });
-
-        // Pausar audio al cambiar de pestaña
         document.addEventListener('visibilitychange', () => {
             if (hasStarted) {
                 if (document.hidden) {
                     audio.pause();
                 } else {
-                    audio.play();
+                    audio.play().catch(e => console.log('Error al reanudar:', e));
                 }
             }
         });
 
         // ============================================
-        // MINI JUEGO: QUIZ
+        // INTERSECTION OBSERVER PARA ANIMACIONES
         // ============================================
-        function quizAnswer(isCorrect) {
-            const options = document.querySelectorAll('.quiz-option');
-            options.forEach(opt => opt.style.pointerEvents = 'none');
-            
-            if (isCorrect) {
-                event.target.classList.add('correct');
-                
-                // Vibración en móvil
-                if (navigator.vibrate) {
-                    navigator.vibrate([100, 50, 100]);
-                }
-                
-                document.getElementById('quizResult').innerHTML = 
-                    '<div class="quiz-result">Exacto… eres peligrosa 😏</div>';
-                
-                setTimeout(() => {
-                    nextSection();
-                }, 3000);
-            } else {
-                event.target.style.background = 'rgba(100, 100, 100, 0.3)';
-                
-                setTimeout(() => {
-                    event.target.style.background = '';
-                    options.forEach(opt => opt.style.pointerEvents = 'all');
-                }, 1000);
-            }
-        }
+        const observerOptions = {
+            threshold: 0.2,
+            rootMargin: '0px 0px -100px 0px'
+        };
 
-        // ============================================
-        // MINI JUEGO: ATRAPA CORAZONES
-        // ============================================
-        function createFloatingHeart() {
-            const gameArea = document.getElementById('gameArea');
-            const heart = document.createElement('div');
-            heart.className = 'floating-heart';
-            heart.textContent = '❤️';
-            heart.style.left = Math.random() * (gameArea.offsetWidth - 50) + 'px';
-            heart.style.bottom = '0px';
-            
-            heart.addEventListener('click', () => {
-                score++;
-                document.getElementById('score').textContent = score;
-                heart.remove();
-                
-                // Vibración
-                if (navigator.vibrate) {
-                    navigator.vibrate(50);
-                }
-                
-                // Efecto visual
-                createConfetti(
-                    parseFloat(heart.style.left) + 25,
-                    gameArea.offsetHeight - parseFloat(heart.style.bottom) - 25
-                );
-                
-                if (score >= 10) {
-                    endCatchGame(true);
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
                 }
             });
-            
-            gameArea.appendChild(heart);
+        }, observerOptions);
+
+        // Observar todas las tarjetas
+        document.querySelectorAll('.gift-card').forEach(card => {
+            observer.observe(card);
+        });
+
+        // ============================================
+        // INICIO DE LA EXPERIENCIA
+        // ============================================
+        startBtn.addEventListener('click', async () => {
+            hasStarted = true;
+
+            // Reproducir audio
+            try {
+                await audio.play();
+            } catch (e) {
+                console.log('Error al reproducir audio:', e);
+            }
+
+            // Transición de pantalla
+            welcomeScreen.classList.add('hidden');
             
             setTimeout(() => {
-                if (heart.parentElement) {
-                    heart.remove();
-                }
-            }, 3000);
-        }
-
-        function startCatchGame() {
-            if (gameStarted) return;
-            gameStarted = true;
-            score = 0;
-            timeLeft = 15;
-            
-            document.getElementById('score').textContent = score;
-            document.getElementById('timer').textContent = timeLeft;
-            
-            // Generar corazones cada 500ms
-            heartInterval = setInterval(createFloatingHeart, 500);
-            
-            // Contador de tiempo
-            gameInterval = setInterval(() => {
-                timeLeft--;
-                document.getElementById('timer').textContent = timeLeft;
+                mainContent.classList.add('visible');
+                scrollIndicator.classList.add('visible');
                 
-                if (timeLeft <= 0) {
-                    endCatchGame(score >= 10);
-                }
+                // Scroll suave a la primera sección
+                setTimeout(() => {
+                    window.scrollTo({
+                        top: window.innerHeight,
+                        behavior: 'smooth'
+                    });
+                }, 500);
             }, 1000);
-        }
 
-        function endCatchGame(won) {
-            clearInterval(gameInterval);
-            clearInterval(heartInterval);
-            gameStarted = false;
-            
-            const gameArea = document.getElementById('gameArea');
-            gameArea.innerHTML = '';
-            
-            const resultDiv = document.getElementById('gameResult');
-            
-            if (won) {
-                resultDiv.innerHTML = `
-                    <div style="font-size: 2rem; color: var(--gold); margin-bottom: 2rem;">
-                        ¡Increíble! Atrapaste todo mi amor ❤️
-                    </div>
-                    <button class="btn" onclick="nextSection()">
-                        ¿Quieres ver tu premio final? 🎁
-                    </button>
-                `;
-            } else {
-                resultDiv.innerHTML = `
-                    <div style="font-size: 1.8rem; color: var(--rose); margin-bottom: 2rem;">
-                        ¡Casi! Pero igual te amo 💕
-                    </div>
-                    <button class="btn" onclick="startCatchGame()">
-                        Intentar de nuevo
-                    </button>
-                    <button class="btn" onclick="nextSection()" 
-                            style="margin-top: 1rem; background: rgba(255,255,255,0.2);">
-                        Continuar de todas formas
-                    </button>
-                `;
-            }
-        }
+            // Iniciar lluvia de corazones
+            startHeartRain();
+
+            // Ocultar scroll indicator después de 5 segundos
+            setTimeout(() => {
+                scrollIndicator.classList.remove('visible');
+            }, 5000);
+
+            // Activar animaciones finales cerca del final de la canción
+            setTimeout(() => {
+                document.querySelector('.finale').scrollIntoView({ 
+                    behavior: 'smooth' 
+                });
+            }, SONG_DURATION - 15000); // 15 segundos antes del final
+        });
 
         // ============================================
-        // EFECTOS ESPECIALES
+        // SCROLL SUAVE Y EFECTOS
         // ============================================
-        function createConfetti(x, y) {
-            for (let i = 0; i < 5; i++) {
-                const confetti = document.createElement('div');
-                confetti.className = 'confetti-heart';
-                confetti.textContent = ['❤️', '💕', '💖', '💗'][Math.floor(Math.random() * 4)];
-                confetti.style.left = x + 'px';
-                confetti.style.top = y + 'px';
-                document.body.appendChild(confetti);
-                
-                setTimeout(() => confetti.remove(), 3000);
-            }
-        }
+        let ticking = false;
 
-        function createConfettiRain() {
-            setInterval(() => {
-                const confetti = document.createElement('div');
-                confetti.className = 'confetti-heart';
-                confetti.textContent = ['❤️', '💕', '💖', '💗', '🔥'][Math.floor(Math.random() * 5)];
-                confetti.style.left = Math.random() * window.innerWidth + 'px';
-                confetti.style.top = '-50px';
-                document.body.appendChild(confetti);
-                
-                setTimeout(() => confetti.remove(), 3000);
-            }, 300);
-        }
+        window.addEventListener('scroll', () => {
+            if (!ticking) {
+                window.requestAnimationFrame(() => {
+                    const scrolled = window.pageYOffset;
+                    const heroTitle = document.querySelector('.hero-title');
+                    
+                    if (heroTitle) {
+                        const opacity = 1 - (scrolled / window.innerHeight);
+                        heroTitle.style.opacity = Math.max(0, opacity);
+                    }
+
+                    ticking = false;
+                });
+                ticking = true;
+            }
+        });
 
         // ============================================
         // INICIALIZACIÓN
@@ -1039,14 +694,47 @@
             initParticles();
         });
 
-        // Prevenir zoom en móviles
-        document.addEventListener('touchmove', (e) => {
-            if (e.touches.length > 1) {
-                e.preventDefault();
-            }
-        }, { passive: false });
+        // Prevenir que el audio se pause por inactividad
+        audio.addEventListener('ended', () => {
+            console.log('Canción finalizada');
+        });
 
-        console.log('❤️ Experiencia interactiva cargada - Para Lidy 14/02/2026 🔥');
+        // ============================================
+        // EFECTOS ADICIONALES DE SCROLL
+        // ============================================
+        window.addEventListener('scroll', () => {
+            const cards = document.querySelectorAll('.gift-card');
+            const scrolled = window.pageYOffset;
+
+            cards.forEach((card, index) => {
+                const cardTop = card.offsetTop;
+                const cardHeight = card.offsetHeight;
+                const windowHeight = window.innerHeight;
+
+                if (scrolled > cardTop - windowHeight + cardHeight / 2) {
+                    card.style.animationDelay = `${index * 0.1}s`;
+                }
+            });
+        });
+
+        // ============================================
+        // OPTIMIZACIÓN DE RENDIMIENTO
+        // ============================================
+        // Reducir partículas en móviles
+        if (window.innerWidth < 768) {
+            particles = particles.slice(0, 30);
+        }
+
+        // Pausar animaciones cuando no está visible
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden) {
+                cancelAnimationFrame(animationFrame);
+            } else {
+                animateParticles();
+            }
+        });
+
+        console.log('🔥 Sitio cargado - Listo para el 14 de febrero 2026 ❤️');
     </script>
 </body>
 </html>
