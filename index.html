@@ -3,9 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="theme-color" content="#1a0a14">
-    <title>Lidy 💋 | 14 de Febrero</title>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-fullscreen">
+    <meta name="mobile-web-app-capable" content="yes">
+    <title>Para Lidy ❤️ | 14 de Febrero 2026</title>
     <style>
+        /* ============================================
+           RESET Y CONFIGURACIÓN BASE
+        ============================================ */
         * {
             margin: 0;
             padding: 0;
@@ -13,31 +18,55 @@
             -webkit-tap-highlight-color: transparent;
         }
 
+        :root {
+            --primary: #ff1744;
+            --secondary: #f50057;
+            --dark: #0a0a0a;
+            --wine: #4a0e2e;
+            --rose: #ff4081;
+            --gold: #ffd700;
+        }
+
         html, body {
             width: 100%;
-            height: 100%;
+            height: 100dvh;
             overflow: hidden;
             position: fixed;
-            touch-action: manipulation;
-            -webkit-user-select: none;
-            user-select: none;
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            background: linear-gradient(135deg, #0a0005 0%, #1a0514 25%, #2d0a28 50%, #1a0514 75%, #0a0005 100%);
-            background-size: 400% 400%;
-            animation: gradientShift 15s ease infinite;
+            font-family: 'Georgia', 'Times New Roman', serif;
+            background: var(--dark);
             color: #fff;
-            position: relative;
+            touch-action: manipulation;
         }
 
-        @keyframes gradientShift {
-            0%, 100% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
+        /* ============================================
+           FONDO ANIMADO
+        ============================================ */
+        .background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            background: linear-gradient(135deg, 
+                var(--dark) 0%, 
+                var(--wine) 50%, 
+                #1a0a14 100%);
+            animation: bgPulse 15s ease-in-out infinite;
         }
 
-        /* Canvas para partículas */
+        @keyframes bgPulse {
+            0%, 100% { 
+                background: linear-gradient(135deg, var(--dark) 0%, var(--wine) 50%, #1a0a14 100%);
+            }
+            50% { 
+                background: linear-gradient(135deg, #1a0a14 0%, var(--wine) 50%, var(--dark) 100%);
+            }
+        }
+
+        /* ============================================
+           CANVAS DE PARTÍCULAS
+        ============================================ */
         #particles {
             position: fixed;
             top: 0;
@@ -48,1023 +77,976 @@
             z-index: 1;
         }
 
-        /* Contenedor principal */
-        .container {
-            position: relative;
+        /* ============================================
+           CONTROL DE AUDIO
+        ============================================ */
+        .audio-control {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: rgba(255, 23, 68, 0.3);
+            backdrop-filter: blur(10px);
+            border: 2px solid var(--rose);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 1.5rem;
+            transition: all 0.3s ease;
+            opacity: 0;
+        }
+
+        .audio-control.visible {
+            opacity: 1;
+        }
+
+        .audio-control:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 20px rgba(255, 23, 68, 0.6);
+        }
+
+        /* ============================================
+           CONTENEDORES DE SECCIONES
+        ============================================ */
+        .section {
+            position: fixed;
+            top: 0;
+            left: 0;
             width: 100%;
             height: 100dvh;
             display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 10;
-            overflow: hidden;
-        }
-
-        /* Secciones */
-        .section {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            display: flex;
             flex-direction: column;
-            align-items: center;
             justify-content: center;
-            padding: 20px;
+            align-items: center;
+            padding: 2rem;
             opacity: 0;
             pointer-events: none;
-            transition: opacity 0.8s ease, filter 0.8s ease;
-            filter: blur(20px);
+            transition: opacity 1s ease;
+            z-index: 10;
         }
 
         .section.active {
             opacity: 1;
             pointer-events: all;
-            filter: blur(0);
         }
 
-        /* Textos */
-        h1 {
+        /* ============================================
+           PANTALLA DE BIENVENIDA
+        ============================================ */
+        #welcome {
+            text-align: center;
+        }
+
+        .welcome-title {
             font-size: clamp(2.5rem, 10vw, 5rem);
-            font-weight: 700;
-            margin-bottom: 20px;
-            text-align: center;
-            text-shadow: 0 0 30px rgba(255, 105, 180, 0.8), 0 0 60px rgba(255, 105, 180, 0.4);
-            animation: pulse 2s ease-in-out infinite;
+            margin-bottom: 2rem;
+            animation: fadeInScale 1.5s ease forwards;
+            text-shadow: 0 0 30px rgba(255, 64, 129, 0.6);
         }
 
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-        }
-
-        .subtitle {
-            font-size: clamp(1.2rem, 5vw, 2rem);
-            text-align: center;
-            margin-bottom: 15px;
+        .welcome-subtitle {
+            font-size: clamp(1.2rem, 4vw, 2rem);
+            margin-bottom: 3rem;
+            font-style: italic;
+            color: var(--rose);
+            animation: fadeInScale 1.5s ease 0.5s forwards;
             opacity: 0;
-            animation: fadeInUp 1s ease forwards;
-            animation-delay: 0.5s;
         }
 
-        .description {
-            font-size: clamp(1rem, 4vw, 1.5rem);
-            text-align: center;
-            margin-bottom: 30px;
-            opacity: 0;
-            animation: fadeInUp 1s ease forwards;
-            animation-delay: 1s;
-        }
-
-        @keyframes fadeInUp {
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        @keyframes fadeInScale {
             from {
                 opacity: 0;
-                transform: translateY(30px);
+                transform: scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
             }
         }
 
-        /* Botones */
+        /* ============================================
+           BOTONES
+        ============================================ */
         .btn {
-            padding: 18px 45px;
-            font-size: clamp(1.1rem, 4vw, 1.5rem);
-            font-weight: 600;
-            background: linear-gradient(135deg, #ff1493, #c71585);
+            padding: 1.5rem 3rem;
+            font-size: clamp(1.1rem, 3vw, 1.4rem);
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
             border: none;
             border-radius: 50px;
             color: white;
             cursor: pointer;
-            box-shadow: 0 0 30px rgba(255, 20, 147, 0.6), 0 10px 30px rgba(0, 0, 0, 0.3);
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            box-shadow: 0 0 30px rgba(255, 23, 68, 0.6);
             transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-            opacity: 0;
-            animation: fadeInUp 1s ease forwards;
-            animation-delay: 1.5s;
-            touch-action: manipulation;
+            font-family: 'Georgia', serif;
+            animation: pulse 2s ease-in-out infinite;
         }
 
         .btn:active {
             transform: scale(0.95);
         }
 
-        .btn::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, transparent 70%);
-            opacity: 0;
-            transition: opacity 0.3s;
+        @keyframes pulse {
+            0%, 100% { 
+                transform: scale(1); 
+                box-shadow: 0 0 30px rgba(255, 23, 68, 0.6);
+            }
+            50% { 
+                transform: scale(1.05); 
+                box-shadow: 0 0 50px rgba(255, 23, 68, 0.9);
+            }
         }
 
-        .btn:hover::before {
-            opacity: 1;
-        }
-
-        /* Caja de regalo */
-        .gift-box {
-            width: 200px;
-            height: 200px;
-            margin: 30px auto;
-            position: relative;
-            cursor: pointer;
-            transition: transform 0.5s ease;
-        }
-
-        .gift-box:hover {
-            transform: scale(1.1) rotate(5deg);
-        }
-
-        .gift-box-container {
+        /* ============================================
+           TARJETAS DE REGALOS
+        ============================================ */
+        .gift-container {
             width: 100%;
-            height: 100%;
-            position: relative;
-            transform-style: preserve-3d;
-            transition: transform 4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-        }
-
-        .gift-box.opening .gift-box-container {
-            transform: rotateY(720deg) scale(1.5);
-        }
-
-        .gift-base {
-            width: 160px;
-            height: 120px;
-            background: linear-gradient(135deg, #ff69b4, #ff1493);
-            position: absolute;
-            bottom: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            border-radius: 10px;
-            box-shadow: 0 10px 40px rgba(255, 20, 147, 0.6);
-        }
-
-        .gift-lid {
-            width: 180px;
-            height: 40px;
-            background: linear-gradient(135deg, #ff1493, #c71585);
-            position: absolute;
-            top: 60px;
-            left: 50%;
-            transform: translateX(-50%);
-            border-radius: 10px 10px 5px 5px;
-            box-shadow: 0 5px 20px rgba(199, 21, 133, 0.6);
-        }
-
-        .gift-ribbon-v {
-            width: 30px;
-            height: 100%;
-            background: linear-gradient(to right, #ffd700, #ffed4e);
-            position: absolute;
-            left: 50%;
-            transform: translateX(-50%);
-            box-shadow: 0 0 15px rgba(255, 215, 0, 0.8);
-        }
-
-        .gift-ribbon-h {
-            width: 100%;
-            height: 30px;
-            background: linear-gradient(to bottom, #ffd700, #ffed4e);
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            box-shadow: 0 0 15px rgba(255, 215, 0, 0.8);
-        }
-
-        .gift-bow {
-            width: 60px;
-            height: 40px;
-            background: #ffd700;
-            position: absolute;
-            top: 40px;
-            left: 50%;
-            transform: translateX(-50%);
-            border-radius: 50% 50% 0 0;
-            box-shadow: 0 0 20px rgba(255, 215, 0, 0.9);
-        }
-
-        .gift-bow::before,
-        .gift-bow::after {
-            content: '';
-            width: 35px;
-            height: 35px;
-            background: #ffd700;
-            position: absolute;
-            border-radius: 50%;
-            top: 5px;
-        }
-
-        .gift-bow::before {
-            left: -25px;
-        }
-
-        .gift-bow::after {
-            right: -25px;
-        }
-
-        /* Contenido de regalo */
-        .gift-content {
+            max-width: 600px;
             text-align: center;
-            max-width: 90%;
-            opacity: 0;
-            transform: scale(0.8);
-            transition: all 1s ease;
         }
 
-        .gift-content.revealed {
-            opacity: 1;
-            transform: scale(1);
+        .gift-number {
+            font-size: clamp(3rem, 12vw, 6rem);
+            font-weight: bold;
+            background: linear-gradient(45deg, var(--primary), var(--gold));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+            animation: shimmer 2s ease-in-out infinite;
         }
 
-        .gift-content h2 {
-            font-size: clamp(1.8rem, 6vw, 3rem);
-            margin-bottom: 20px;
-            color: #ff69b4;
-            text-shadow: 0 0 20px rgba(255, 105, 180, 0.8);
+        @keyframes shimmer {
+            0%, 100% { filter: brightness(1); }
+            50% { filter: brightness(1.5); }
         }
 
-        .gift-content p {
-            font-size: clamp(1.1rem, 4vw, 1.8rem);
-            line-height: 1.6;
-            margin-bottom: 30px;
+        .gift-title {
+            font-size: clamp(2rem, 6vw, 3rem);
+            margin-bottom: 2rem;
+            color: var(--rose);
+            text-shadow: 0 0 20px rgba(255, 64, 129, 0.4);
+        }
+
+        .gift-description {
+            font-size: clamp(1.3rem, 4vw, 1.8rem);
+            line-height: 1.8;
             font-style: italic;
+            margin-bottom: 3rem;
+            padding: 0 1rem;
         }
 
-        /* Barra de progreso */
-        .progress-bar {
-            position: fixed;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            gap: 8px;
-            z-index: 100;
+        .gift-card-wrapper {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(15px);
+            border-radius: 30px;
+            padding: 3rem 2rem;
+            border: 2px solid rgba(255, 64, 129, 0.3);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+            animation: cardAppear 1s ease forwards;
         }
 
-        .progress-dot {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.3);
-            transition: all 0.3s ease;
+        @keyframes cardAppear {
+            from {
+                opacity: 0;
+                transform: translateY(50px) rotateX(20deg);
+                filter: blur(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) rotateX(0);
+                filter: blur(0);
+            }
         }
 
-        .progress-dot.active {
-            background: #ff1493;
-            box-shadow: 0 0 15px rgba(255, 20, 147, 0.8);
-            transform: scale(1.3);
-        }
-
-        /* Controles de audio */
-        .audio-control {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            width: 60px;
-            height: 60px;
-            background: rgba(255, 20, 147, 0.9);
-            border: none;
-            border-radius: 50%;
-            color: white;
-            font-size: 24px;
-            cursor: pointer;
-            box-shadow: 0 0 20px rgba(255, 20, 147, 0.6);
-            z-index: 1000;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s ease;
-            touch-action: manipulation;
-        }
-
-        .audio-control:active {
-            transform: scale(0.9);
-        }
-
-        /* Mini Juego */
-        .game-container {
+        /* ============================================
+           MINI JUEGO - QUIZ
+        ============================================ */
+        .quiz-container {
             width: 100%;
-            max-width: 500px;
-            height: 60vh;
-            position: relative;
-            background: rgba(0, 0, 0, 0.3);
+            max-width: 700px;
+            text-align: center;
+        }
+
+        .quiz-question {
+            font-size: clamp(1.5rem, 5vw, 2.5rem);
+            margin-bottom: 3rem;
+            color: var(--rose);
+            animation: fadeIn 1s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .quiz-options {
+            display: grid;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .quiz-option {
+            padding: 1.5rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 64, 129, 0.3);
             border-radius: 20px;
-            border: 2px solid rgba(255, 105, 180, 0.3);
-            overflow: hidden;
+            cursor: pointer;
+            font-size: clamp(1.1rem, 3vw, 1.4rem);
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .quiz-option:hover, .quiz-option:active {
+            background: rgba(255, 64, 129, 0.2);
+            border-color: var(--rose);
+            transform: scale(1.02);
+        }
+
+        .quiz-option.correct {
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            border-color: var(--gold);
+            animation: correctAnswer 0.5s ease;
+        }
+
+        @keyframes correctAnswer {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .quiz-result {
+            font-size: clamp(1.5rem, 5vw, 2.5rem);
+            color: var(--gold);
+            font-style: italic;
+            margin-top: 2rem;
+            animation: resultGlow 1s ease;
+        }
+
+        @keyframes resultGlow {
+            from {
+                opacity: 0;
+                text-shadow: 0 0 0px rgba(255, 215, 0, 0);
+            }
+            to {
+                opacity: 1;
+                text-shadow: 0 0 30px rgba(255, 215, 0, 0.8);
+            }
+        }
+
+        /* ============================================
+           MINI JUEGO - ATRAPA CORAZONES
+        ============================================ */
+        .catch-game {
+            width: 100%;
+            max-width: 700px;
+            text-align: center;
+        }
+
+        .game-header {
+            font-size: clamp(1.5rem, 5vw, 2.5rem);
+            margin-bottom: 1rem;
+            color: var(--rose);
         }
 
         .game-stats {
-            position: absolute;
-            top: 20px;
-            left: 0;
-            right: 0;
             display: flex;
-            justify-content: space-around;
-            font-size: clamp(1.2rem, 5vw, 1.8rem);
-            font-weight: 600;
-            z-index: 10;
-            padding: 0 20px;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+            font-size: clamp(1.2rem, 4vw, 1.8rem);
         }
 
-        .game-stat {
-            background: rgba(255, 20, 147, 0.8);
-            padding: 10px 20px;
-            border-radius: 15px;
-            box-shadow: 0 0 15px rgba(255, 20, 147, 0.6);
+        .game-area {
+            position: relative;
+            width: 100%;
+            height: 60vh;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 30px;
+            border: 2px solid rgba(255, 64, 129, 0.3);
+            overflow: hidden;
+            backdrop-filter: blur(10px);
         }
 
-        .heart-target {
+        .floating-heart {
             position: absolute;
-            font-size: 40px;
+            font-size: 2.5rem;
             cursor: pointer;
-            transition: transform 0.1s ease;
-            animation: floatHeart 3s ease-in-out infinite;
-            z-index: 5;
+            animation: floatUp 3s linear;
+            user-select: none;
         }
 
-        @keyframes floatHeart {
-            0%, 100% { transform: translateY(0) rotate(0deg); }
-            50% { transform: translateY(-20px) rotate(10deg); }
-        }
-
-        .heart-target:active {
-            transform: scale(1.5);
-        }
-
-        .game-result {
-            text-align: center;
-            font-size: clamp(1.5rem, 6vw, 2.5rem);
-            margin: 30px 0;
-        }
-
-        /* Efectos especiales */
-        @keyframes explode {
-            0% {
-                transform: scale(1);
+        @keyframes floatUp {
+            from {
+                transform: translateY(0) rotate(0deg);
                 opacity: 1;
             }
-            100% {
-                transform: scale(3);
+            to {
+                transform: translateY(-60vh) rotate(360deg);
                 opacity: 0;
             }
         }
 
-        .heart-explosion {
-            position: fixed;
-            pointer-events: none;
-            animation: explode 0.6s ease-out forwards;
-            z-index: 1000;
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .gift-box {
-                width: 150px;
-                height: 150px;
-            }
-            
-            .gift-base {
-                width: 120px;
-                height: 90px;
-            }
-            
-            .gift-lid {
-                width: 135px;
-                height: 30px;
-                top: 45px;
-            }
-        }
-
-        /* Loading indicator */
-        .audio-status {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: rgba(0, 0, 0, 0.9);
-            padding: 30px 50px;
-            border-radius: 20px;
-            font-size: 1.2rem;
-            z-index: 2000;
-            display: none;
+        /* ============================================
+           PANTALLA FINAL
+        ============================================ */
+        .finale-container {
             text-align: center;
-            border: 2px solid #ff1493;
+            max-width: 800px;
+        }
+
+        .finale-title {
+            font-size: clamp(2.5rem, 8vw, 4.5rem);
+            margin-bottom: 2rem;
+            animation: finaleGlow 2s ease-in-out infinite;
+        }
+
+        @keyframes finaleGlow {
+            0%, 100% {
+                text-shadow: 0 0 20px rgba(255, 23, 68, 0.6),
+                             0 0 40px rgba(255, 23, 68, 0.4);
+            }
+            50% {
+                text-shadow: 0 0 40px rgba(255, 23, 68, 1),
+                             0 0 80px rgba(255, 23, 68, 0.6);
+            }
+        }
+
+        .finale-message {
+            font-size: clamp(1.5rem, 5vw, 2.5rem);
+            line-height: 1.8;
+            font-style: italic;
+            margin-bottom: 3rem;
+        }
+
+        /* ============================================
+           EFECTOS ESPECIALES
+        ============================================ */
+        .confetti-heart {
+            position: fixed;
+            font-size: 2rem;
+            pointer-events: none;
+            z-index: 9998;
+            animation: confettiFall 3s ease-out forwards;
+        }
+
+        @keyframes confettiFall {
+            from {
+                transform: translateY(-100px) rotate(0deg);
+                opacity: 1;
+            }
+            to {
+                transform: translateY(100vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
+
+        /* ============================================
+           RESPONSIVE
+        ============================================ */
+        @media (max-width: 768px) {
+            .gift-card-wrapper {
+                padding: 2rem 1.5rem;
+            }
+            
+            .btn {
+                padding: 1.2rem 2rem;
+            }
+
+            .game-area {
+                height: 50vh;
+            }
+        }
+
+        /* ============================================
+           UTILIDADES
+        ============================================ */
+        .hidden {
+            display: none;
+        }
+
+        .blur-bg {
+            filter: blur(10px);
         }
     </style>
 </head>
 <body>
-    <!-- Canvas para partículas -->
+    <!-- Fondo animado -->
+    <div class="background"></div>
+    
+    <!-- Canvas de partículas -->
     <canvas id="particles"></canvas>
 
-    <!-- Indicador de estado de audio -->
-    <div id="audioStatus" class="audio-status"></div>
-
-    <!-- Barra de progreso -->
-    <div class="progress-bar" id="progressBar"></div>
-
     <!-- Control de audio -->
-    <button class="audio-control" id="audioControl" style="display: none;">
-        🔊
-    </button>
-
-    <!-- Contenedor principal -->
-    <div class="container">
-        <!-- Sección 0: Inicio -->
-        <div class="section active" id="section0">
-            <h1>Lidy 💋</h1>
-            <div class="subtitle">Este 14 de febrero…</div>
-            <div class="description">Es nuestro día.</div>
-            <button class="btn" onclick="startExperience()">Toca aquí para iniciar 🔥</button>
-        </div>
-
-        <!-- Secciones de regalos (1-10) -->
-        <div class="section" id="section1">
-            <div class="gift-box" onclick="openGift(1)">
-                <div class="gift-box-container">
-                    <div class="gift-base"></div>
-                    <div class="gift-lid">
-                        <div class="gift-ribbon-v"></div>
-                        <div class="gift-ribbon-h"></div>
-                        <div class="gift-bow"></div>
-                    </div>
-                </div>
-            </div>
-            <p style="font-size: clamp(1rem, 4vw, 1.3rem); margin-top: 20px; opacity: 0.8;">Toca para abrir 🎁</p>
-            <div class="gift-content" id="content1">
-                <h2>🍫 Chocolate Turín Masterpieces</h2>
-                <p>"Se ven buenos… pero tú te ves mejor."</p>
-                <button class="btn" onclick="nextSection(2)">Siguiente ➜</button>
-            </div>
-        </div>
-
-        <div class="section" id="section2">
-            <div class="gift-box" onclick="openGift(2)">
-                <div class="gift-box-container">
-                    <div class="gift-base"></div>
-                    <div class="gift-lid">
-                        <div class="gift-ribbon-v"></div>
-                        <div class="gift-ribbon-h"></div>
-                        <div class="gift-bow"></div>
-                    </div>
-                </div>
-            </div>
-            <p style="font-size: clamp(1rem, 4vw, 1.3rem); margin-top: 20px; opacity: 0.8;">Toca para abrir 🎁</p>
-            <div class="gift-content" id="content2">
-                <h2>👗 Pijama</h2>
-                <p>"Me encanta verte cómoda… aunque prefiero cuando dura poquito."</p>
-                <button class="btn" onclick="nextSection(3)">Siguiente ➜</button>
-            </div>
-        </div>
-
-        <div class="section" id="section3">
-            <div class="gift-box" onclick="openGift(3)">
-                <div class="gift-box-container">
-                    <div class="gift-base"></div>
-                    <div class="gift-lid">
-                        <div class="gift-ribbon-v"></div>
-                        <div class="gift-ribbon-h"></div>
-                        <div class="gift-bow"></div>
-                    </div>
-                </div>
-            </div>
-            <p style="font-size: clamp(1rem, 4vw, 1.3rem); margin-top: 20px; opacity: 0.8;">Toca para abrir 🎁</p>
-            <div class="gift-content" id="content3">
-                <h2>💙 Peluche Tristeza</h2>
-                <p>"Se parece a Tristeza… pero tú eres mi Alegría."</p>
-                <button class="btn" onclick="nextSection(4)">Siguiente ➜</button>
-            </div>
-        </div>
-
-        <div class="section" id="section4">
-            <div class="gift-box" onclick="openGift(4)">
-                <div class="gift-box-container">
-                    <div class="gift-base"></div>
-                    <div class="gift-lid">
-                        <div class="gift-ribbon-v"></div>
-                        <div class="gift-ribbon-h"></div>
-                        <div class="gift-bow"></div>
-                    </div>
-                </div>
-            </div>
-            <p style="font-size: clamp(1rem, 4vw, 1.3rem); margin-top: 20px; opacity: 0.8;">Toca para abrir 🎁</p>
-            <div class="gift-content" id="content4">
-                <h2>♾️ Réplica Botella Klein</h2>
-                <p>"Lo nuestro no tiene principio ni fin."</p>
-                <button class="btn" onclick="nextSection(5)">Siguiente ➜</button>
-            </div>
-        </div>
-
-        <div class="section" id="section5">
-            <div class="gift-box" onclick="openGift(5)">
-                <div class="gift-box-container">
-                    <div class="gift-base"></div>
-                    <div class="gift-lid">
-                        <div class="gift-ribbon-v"></div>
-                        <div class="gift-ribbon-h"></div>
-                        <div class="gift-bow"></div>
-                    </div>
-                </div>
-            </div>
-            <p style="font-size: clamp(1rem, 4vw, 1.3rem); margin-top: 20px; opacity: 0.8;">Toca para abrir 🎁</p>
-            <div class="gift-content" id="content5">
-                <h2>👙 Calzón</h2>
-                <p>"Que no se pierda la costumbre de modelar… mi obra favorita."</p>
-                <button class="btn" onclick="nextSection(6)">Siguiente ➜</button>
-            </div>
-        </div>
-
-        <div class="section" id="section6">
-            <div class="gift-box" onclick="openGift(6)">
-                <div class="gift-box-container">
-                    <div class="gift-base"></div>
-                    <div class="gift-lid">
-                        <div class="gift-ribbon-v"></div>
-                        <div class="gift-ribbon-h"></div>
-                        <div class="gift-bow"></div>
-                    </div>
-                </div>
-            </div>
-            <p style="font-size: clamp(1rem, 4vw, 1.3rem); margin-top: 20px; opacity: 0.8;">Toca para abrir 🎁</p>
-            <div class="gift-content" id="content6">
-                <h2>✨ Crema Tono Natural</h2>
-                <p>"Para cuidar tu piel… aunque ya iluminas todo."</p>
-                <button class="btn" onclick="nextSection(7)">Siguiente ➜</button>
-            </div>
-        </div>
-
-        <div class="section" id="section7">
-            <div class="gift-box" onclick="openGift(7)">
-                <div class="gift-box-container">
-                    <div class="gift-base"></div>
-                    <div class="gift-lid">
-                        <div class="gift-ribbon-v"></div>
-                        <div class="gift-ribbon-h"></div>
-                        <div class="gift-bow"></div>
-                    </div>
-                </div>
-            </div>
-            <p style="font-size: clamp(1rem, 4vw, 1.3rem); margin-top: 20px; opacity: 0.8;">Toca para abrir 🎁</p>
-            <div class="gift-content" id="content7">
-                <h2>💃 Baby Doll</h2>
-                <p>"Espero te quede perfecto… aunque perfecta ya eres tú."</p>
-                <button class="btn" onclick="nextSection(8)">Siguiente ➜</button>
-            </div>
-        </div>
-
-        <div class="section" id="section8">
-            <div class="gift-box" onclick="openGift(8)">
-                <div class="gift-box-container">
-                    <div class="gift-base"></div>
-                    <div class="gift-lid">
-                        <div class="gift-ribbon-v"></div>
-                        <div class="gift-ribbon-h"></div>
-                        <div class="gift-bow"></div>
-                    </div>
-                </div>
-            </div>
-            <p style="font-size: clamp(1rem, 4vw, 1.3rem); margin-top: 20px; opacity: 0.8;">Toca para abrir 🎁</p>
-            <div class="gift-content" id="content8">
-                <h2>🧲 Calcetas Imán</h2>
-                <p>"Siempre terminamos juntos, aunque nos soltemos tantito."</p>
-                <button class="btn" onclick="nextSection(9)">Siguiente ➜</button>
-            </div>
-        </div>
-
-        <div class="section" id="section9">
-            <div class="gift-box" onclick="openGift(9)">
-                <div class="gift-box-container">
-                    <div class="gift-base"></div>
-                    <div class="gift-lid">
-                        <div class="gift-ribbon-v"></div>
-                        <div class="gift-ribbon-h"></div>
-                        <div class="gift-bow"></div>
-                    </div>
-                </div>
-            </div>
-            <p style="font-size: clamp(1rem, 4vw, 1.3rem); margin-top: 20px; opacity: 0.8;">Toca para abrir 🎁</p>
-            <div class="gift-content" id="content9">
-                <h2>💅 Isdin Nails</h2>
-                <p>"Para que tus uñas crezcan… y me sigas marcando el corazón."</p>
-                <button class="btn" onclick="nextSection(10)">Siguiente ➜</button>
-            </div>
-        </div>
-
-        <div class="section" id="section10">
-            <div class="gift-box" onclick="openGift(10)">
-                <div class="gift-box-container">
-                    <div class="gift-base"></div>
-                    <div class="gift-lid">
-                        <div class="gift-ribbon-v"></div>
-                        <div class="gift-ribbon-h"></div>
-                        <div class="gift-bow"></div>
-                    </div>
-                </div>
-            </div>
-            <p style="font-size: clamp(1rem, 4vw, 1.3rem); margin-top: 20px; opacity: 0.8;">Toca para abrir 🎁</p>
-            <div class="gift-content" id="content10">
-                <h2>📖 Libro Carpe Diem</h2>
-                <p>"Contigo quiero vivir el presente… una y otra vez."</p>
-                <button class="btn" onclick="nextSection(11)">Siguiente ➜</button>
-            </div>
-        </div>
-
-        <!-- Sección 11: Mini Juego -->
-        <div class="section" id="section11">
-            <h2 style="margin-bottom: 20px; font-size: clamp(1.5rem, 6vw, 2.5rem);">Nivel Final: Mini Juego 💘</h2>
-            <p style="font-size: clamp(1rem, 4vw, 1.3rem); margin-bottom: 20px; text-align: center;">¡Atrapa 12 corazones en 20 segundos!</p>
-            <div class="game-container" id="gameContainer">
-                <div class="game-stats">
-                    <div class="game-stat">❤️ <span id="score">0</span>/12</div>
-                    <div class="game-stat">⏱️ <span id="timer">20</span>s</div>
-                </div>
-            </div>
-            <div id="gameResult" style="display: none;">
-                <div class="game-result" id="resultText"></div>
-                <button class="btn" id="gameActionBtn" style="animation: none; opacity: 1;"></button>
-            </div>
-        </div>
-
-        <!-- Sección 12: Final -->
-        <div class="section" id="section12">
-            <h1 style="font-size: clamp(2rem, 8vw, 4rem); margin-bottom: 30px;">Lidy…</h1>
-            <p style="font-size: clamp(1.3rem, 5vw, 2.2rem); line-height: 1.8; text-align: center; max-width: 90%; margin-bottom: 20px;">
-                Tu sonrisa me enamora…<br>
-                pero tu energía me enciende.
-            </p>
-            <h2 style="font-size: clamp(1.8rem, 7vw, 3.5rem); margin: 30px 0; text-shadow: 0 0 30px rgba(255, 20, 147, 0.9);">
-                Feliz 14 de febrero ❤️🔥
-            </h2>
-            <button class="btn" onclick="restart()" style="animation: none; opacity: 1; margin-top: 30px;">Repetir experiencia ↻</button>
-        </div>
+    <div class="audio-control" id="audioControl">
+        <span id="audioIcon">🔊</span>
     </div>
 
-    <!-- Audio -->
-    <audio id="bgMusic" loop>
+    <!-- Audio oculto -->
+    <audio id="backgroundMusic" preload="auto" loop>
         <source src="track.mp3" type="audio/mpeg">
     </audio>
 
+    <!-- ============================================
+         SECCIÓN 1: BIENVENIDA
+    ============================================ -->
+    <section class="section active" id="welcome">
+        <h1 class="welcome-title">Lidy 💋</h1>
+        <p class="welcome-subtitle">
+            Este 14 de febrero no es cualquier día…<br>
+            Es nuestro día.
+        </p>
+        <button class="btn" id="startBtn">Haz click aquí y prepárate 🔥</button>
+    </section>
+
+    <!-- ============================================
+         SECCIONES DE REGALOS (10)
+    ============================================ -->
+    <section class="section" id="gift1">
+        <div class="gift-container">
+            <div class="gift-card-wrapper">
+                <div class="gift-number">01</div>
+                <h2 class="gift-title">Chocolate Turín Masterpieces</h2>
+                <p class="gift-description">
+                    Los compré porque se ven buenos…<br>
+                    pero tú estás mucho mejor.
+                </p>
+            </div>
+            <button class="btn" onclick="nextSection()">Descubrir siguiente 💝</button>
+        </div>
+    </section>
+
+    <section class="section" id="gift2">
+        <div class="gift-container">
+            <div class="gift-card-wrapper">
+                <div class="gift-number">02</div>
+                <h2 class="gift-title">Pijama</h2>
+                <p class="gift-description">
+                    Me encanta cuando la usas…<br>
+                    pero más cuando no dura mucho puesta.
+                </p>
+            </div>
+            <button class="btn" onclick="nextSection()">Descubrir siguiente 💝</button>
+        </div>
+    </section>
+
+    <section class="section" id="gift3">
+        <div class="gift-container">
+            <div class="gift-card-wrapper">
+                <div class="gift-number">03</div>
+                <h2 class="gift-title">Peluche Tristeza</h2>
+                <p class="gift-description">
+                    Dicen que se parece a Tristeza…<br>
+                    pero tú eres mi Alegría favorita.
+                </p>
+            </div>
+            <button class="btn" onclick="nextSection()">Descubrir siguiente 💝</button>
+        </div>
+    </section>
+
+    <section class="section" id="gift4">
+        <div class="gift-container">
+            <div class="gift-card-wrapper">
+                <div class="gift-number">04</div>
+                <h2 class="gift-title">Forma Klein</h2>
+                <p class="gift-description">
+                    Como esta forma…<br>
+                    lo nuestro no tiene principio ni fin.
+                </p>
+            </div>
+            <button class="btn" onclick="nextSection()">Descubrir siguiente 💝</button>
+        </div>
+    </section>
+
+    <section class="section" id="gift5">
+        <div class="gift-container">
+            <div class="gift-card-wrapper">
+                <div class="gift-number">05</div>
+                <h2 class="gift-title">Calzón</h2>
+                <p class="gift-description">
+                    Porque el arte también se modela…<br>
+                    y tú eres mi obra favorita.
+                </p>
+            </div>
+            <button class="btn" onclick="nextSection()">Descubrir siguiente 💝</button>
+        </div>
+    </section>
+
+    <section class="section" id="gift6">
+        <div class="gift-container">
+            <div class="gift-card-wrapper">
+                <div class="gift-number">06</div>
+                <h2 class="gift-title">Crema Tono Natural</h2>
+                <p class="gift-description">
+                    Para que sigas brillando…<br>
+                    aunque ya iluminas todo.
+                </p>
+            </div>
+            <button class="btn" onclick="nextSection()">Descubrir siguiente 💝</button>
+        </div>
+    </section>
+
+    <section class="section" id="gift7">
+        <div class="gift-container">
+            <div class="gift-card-wrapper">
+                <div class="gift-number">07</div>
+                <h2 class="gift-title">Baby Doll</h2>
+                <p class="gift-description">
+                    Espero que te quede perfecto…<br>
+                    aunque sé que lo perfecto ya eres tú.
+                </p>
+            </div>
+            <button class="btn" onclick="nextSection()">Descubrir siguiente 💝</button>
+        </div>
+    </section>
+
+    <section class="section" id="gift8">
+        <div class="gift-container">
+            <div class="gift-card-wrapper">
+                <div class="gift-number">08</div>
+                <h2 class="gift-title">Calcetas Imán</h2>
+                <p class="gift-description">
+                    Porque siempre terminamos juntos…<br>
+                    aunque intentemos separarnos.
+                </p>
+            </div>
+            <button class="btn" onclick="nextSection()">Descubrir siguiente 💝</button>
+        </div>
+    </section>
+
+    <section class="section" id="gift9">
+        <div class="gift-container">
+            <div class="gift-card-wrapper">
+                <div class="gift-number">09</div>
+                <h2 class="gift-title">Isdin Nails</h2>
+                <p class="gift-description">
+                    Para que tus uñas crezcan…<br>
+                    y me sigas marcando el corazón.
+                </p>
+            </div>
+            <button class="btn" onclick="nextSection()">Descubrir siguiente 💝</button>
+        </div>
+    </section>
+
+    <section class="section" id="gift10">
+        <div class="gift-container">
+            <div class="gift-card-wrapper">
+                <div class="gift-number">10</div>
+                <h2 class="gift-title">Libro Carpe Diem</h2>
+                <p class="gift-description">
+                    Porque contigo quiero vivir el presente…<br>
+                    una y otra vez.
+                </p>
+            </div>
+            <button class="btn" onclick="nextSection()">Siguiente sorpresa 🎮</button>
+        </div>
+    </section>
+
+    <!-- ============================================
+         MINI JUEGO 1: QUIZ
+    ============================================ -->
+    <section class="section" id="quiz">
+        <div class="quiz-container">
+            <h2 class="quiz-question">¿Qué tanto me conoces, Lidy? 💋</h2>
+            <p style="font-size: 1.5rem; margin-bottom: 2rem; color: var(--rose);">
+                ¿Qué es lo que más me vuelve loco de ti?
+            </p>
+            <div class="quiz-options">
+                <div class="quiz-option" onclick="quizAnswer(false)">Tu sonrisa</div>
+                <div class="quiz-option" onclick="quizAnswer(false)">Tu energía</div>
+                <div class="quiz-option" onclick="quizAnswer(false)">Tus abrazos</div>
+                <div class="quiz-option" onclick="quizAnswer(true)">🔥 Tú sabes cuál 🔥</div>
+            </div>
+            <div id="quizResult"></div>
+        </div>
+    </section>
+
+    <!-- ============================================
+         MINI JUEGO 2: ATRAPA CORAZONES
+    ============================================ -->
+    <section class="section" id="catchGame">
+        <div class="catch-game">
+            <h2 class="game-header">¡Atrapa mi amor! ❤️</h2>
+            <div class="game-stats">
+                <div>Corazones: <span id="score">0</span>/10</div>
+                <div>Tiempo: <span id="timer">15</span>s</div>
+            </div>
+            <div class="game-area" id="gameArea"></div>
+            <div id="gameResult" style="margin-top: 2rem;"></div>
+        </div>
+    </section>
+
+    <!-- ============================================
+         PANTALLA FINAL
+    ============================================ -->
+    <section class="section" id="finale">
+        <div class="finale-container">
+            <h1 class="finale-title">Lidy…</h1>
+            <p class="finale-message">
+                Tu sonrisa me enamora…<br>
+                pero tu energía me enciende.<br><br>
+                <span style="color: var(--gold); font-size: 1.2em;">
+                    Feliz 14 de febrero ❤️🔥
+                </span>
+            </p>
+        </div>
+    </section>
+
     <script>
-        // Variables globales
+        // ============================================
+        // VARIABLES GLOBALES
+        // ============================================
+        const audio = document.getElementById('backgroundMusic');
+        const audioControl = document.getElementById('audioControl');
+        const audioIcon = document.getElementById('audioIcon');
+        const canvas = document.getElementById('particles');
+        const ctx = canvas.getContext('2d');
+        
         let currentSection = 0;
-        let audio = document.getElementById('bgMusic');
-        let audioControl = document.getElementById('audioControl');
+        let hasStarted = false;
         let isMuted = false;
-        let gameInterval = null;
-        let gameTimer = null;
+        let particles = [];
+        let animationFrame;
+        let gameStarted = false;
         let score = 0;
-        let timeLeft = 20;
-        const totalSections = 12;
+        let timeLeft = 15;
+        let gameInterval;
+        let heartInterval;
 
-        // Inicializar barra de progreso
-        function initProgressBar() {
-            const progressBar = document.getElementById('progressBar');
-            for (let i = 0; i <= totalSections; i++) {
-                const dot = document.createElement('div');
-                dot.className = 'progress-dot';
-                dot.id = `dot${i}`;
-                progressBar.appendChild(dot);
-            }
-            document.getElementById('dot0').classList.add('active');
-        }
+        const sections = [
+            'welcome', 'gift1', 'gift2', 'gift3', 'gift4', 'gift5',
+            'gift6', 'gift7', 'gift8', 'gift9', 'gift10', 'quiz', 
+            'catchGame', 'finale'
+        ];
 
-        // Actualizar progreso
-        function updateProgress(section) {
-            for (let i = 0; i <= totalSections; i++) {
-                const dot = document.getElementById(`dot${i}`);
-                if (dot) {
-                    dot.classList.toggle('active', i === section);
-                }
-            }
-        }
-
-        // Intentar entrar en fullscreen
-        function tryFullscreen() {
+        // ============================================
+        // FULLSCREEN
+        // ============================================
+        function enterFullscreen() {
             const elem = document.documentElement;
-            try {
-                if (elem.requestFullscreen) {
-                    elem.requestFullscreen().catch(() => {});
-                } else if (elem.webkitRequestFullscreen) {
-                    elem.webkitRequestFullscreen().catch(() => {});
-                } else if (elem.msRequestFullscreen) {
-                    elem.msRequestFullscreen().catch(() => {});
+            if (elem.requestFullscreen) {
+                elem.requestFullscreen();
+            } else if (elem.webkitRequestFullscreen) {
+                elem.webkitRequestFullscreen();
+            } else if (elem.mozRequestFullScreen) {
+                elem.mozRequestFullScreen();
+            } else if (elem.msRequestFullscreen) {
+                elem.msRequestFullscreen();
+            }
+        }
+
+        // ============================================
+        // SISTEMA DE PARTÍCULAS
+        // ============================================
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 2 + 1;
+                this.speedX = Math.random() * 0.5 - 0.25;
+                this.speedY = Math.random() * 0.5 - 0.25;
+                this.opacity = Math.random() * 0.5 + 0.2;
+            }
+
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+
+                if (this.x > canvas.width) this.x = 0;
+                if (this.x < 0) this.x = canvas.width;
+                if (this.y > canvas.height) this.y = 0;
+                if (this.y < 0) this.y = canvas.height;
+            }
+
+            draw() {
+                ctx.fillStyle = `rgba(255, 64, 129, ${this.opacity})`;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        function initParticles() {
+            particles = [];
+            const count = window.innerWidth < 768 ? 30 : 60;
+            for (let i = 0; i < count; i++) {
+                particles.push(new Particle());
+            }
+        }
+
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => {
+                p.update();
+                p.draw();
+            });
+            animationFrame = requestAnimationFrame(animateParticles);
+        }
+
+        // ============================================
+        // NAVEGACIÓN ENTRE SECCIONES
+        // ============================================
+        function nextSection() {
+            if (currentSection < sections.length - 1) {
+                document.getElementById(sections[currentSection]).classList.remove('active');
+                currentSection++;
+                
+                // Delay para transición suave
+                setTimeout(() => {
+                    document.getElementById(sections[currentSection]).classList.add('active');
+                    
+                    // Iniciar juegos automáticamente
+                    if (sections[currentSection] === 'catchGame') {
+                        setTimeout(startCatchGame, 1000);
+                    }
+                    
+                    // Confetti en pantalla final
+                    if (sections[currentSection] === 'finale') {
+                        createConfettiRain();
+                    }
+                }, 500);
+            }
+        }
+
+        // ============================================
+        // BOTÓN DE INICIO
+        // ============================================
+        document.getElementById('startBtn').addEventListener('click', async () => {
+            if (!hasStarted) {
+                hasStarted = true;
+                
+                // Intentar fullscreen
+                try {
+                    await enterFullscreen();
+                } catch (e) {
+                    console.log('Fullscreen no disponible');
                 }
-            } catch (e) {
-                // Fullscreen no soportado o bloqueado
+                
+                // Reproducir audio
+                try {
+                    await audio.play();
+                    audioControl.classList.add('visible');
+                } catch (e) {
+                    console.log('Error reproduciendo audio:', e);
+                }
+                
+                // Avanzar a primera sección de regalo
+                nextSection();
             }
-            
-            // Simular fullscreen en iOS
-            document.body.style.position = 'fixed';
-            document.body.style.width = '100%';
-            document.body.style.height = '100dvh';
-            window.scrollTo(0, 0);
-        }
+        });
 
-        // Iniciar audio
-        function startAudio() {
-            try {
-                audio.play().then(() => {
-                    audioControl.style.display = 'flex';
-                }).catch(err => {
-                    console.log('Audio play failed:', err);
-                    showAudioStatus('Toca para iniciar música 🎵');
-                    document.body.addEventListener('click', function tryPlay() {
-                        audio.play().then(() => {
-                            audioControl.style.display = 'flex';
-                            hideAudioStatus();
-                            document.body.removeEventListener('click', tryPlay);
-                        }).catch(() => {});
-                    }, { once: true });
-                });
-            } catch (e) {
-                showAudioStatus('Error al cargar música');
-            }
-        }
-
-        // Mostrar estado de audio
-        function showAudioStatus(message) {
-            const status = document.getElementById('audioStatus');
-            status.textContent = message;
-            status.style.display = 'block';
-        }
-
-        function hideAudioStatus() {
-            document.getElementById('audioStatus').style.display = 'none';
-        }
-
-        // Control de audio (mute/unmute)
+        // ============================================
+        // CONTROL DE AUDIO
+        // ============================================
         audioControl.addEventListener('click', () => {
             isMuted = !isMuted;
             audio.muted = isMuted;
-            audioControl.textContent = isMuted ? '🔇' : '🔊';
-            vibrate(50);
+            audioIcon.textContent = isMuted ? '🔇' : '🔊';
         });
 
-        // Pausar audio cuando cambia de pestaña
+        // Pausar audio al cambiar de pestaña
         document.addEventListener('visibilitychange', () => {
-            if (document.hidden) {
-                audio.pause();
-            } else {
-                if (!isMuted) {
-                    audio.play().catch(() => {});
+            if (hasStarted) {
+                if (document.hidden) {
+                    audio.pause();
+                } else {
+                    audio.play();
                 }
             }
         });
 
-        // Iniciar experiencia
-        function startExperience() {
-            tryFullscreen();
-            startAudio();
-            nextSection(1);
-            vibrate(100);
-        }
-
-        // Cambiar de sección
-        function nextSection(section) {
-            document.getElementById(`section${currentSection}`).classList.remove('active');
-            currentSection = section;
-            document.getElementById(`section${section}`).classList.add('active');
-            updateProgress(section);
-            vibrate(50);
-
-            // Si llegamos a la sección del juego, iniciarlo automáticamente
-            if (section === 11) {
-                setTimeout(startGame, 1000);
-            }
-        }
-
-        // Abrir regalo
-        function openGift(giftNumber) {
-            const giftBox = document.querySelector(`#section${giftNumber} .gift-box`);
-            const content = document.getElementById(`content${giftNumber}`);
+        // ============================================
+        // MINI JUEGO: QUIZ
+        // ============================================
+        function quizAnswer(isCorrect) {
+            const options = document.querySelectorAll('.quiz-option');
+            options.forEach(opt => opt.style.pointerEvents = 'none');
             
-            if (!giftBox.classList.contains('opening')) {
-                giftBox.classList.add('opening');
-                vibrate([100, 50, 100]);
+            if (isCorrect) {
+                event.target.classList.add('correct');
                 
-                // Mostrar contenido después de la animación
-                setTimeout(() => {
-                    giftBox.style.display = 'none';
-                    content.classList.add('revealed');
-                }, 4000);
-            }
-        }
-
-        // Mini juego
-        function startGame() {
-            score = 0;
-            timeLeft = 20;
-            document.getElementById('score').textContent = score;
-            document.getElementById('timer').textContent = timeLeft;
-            document.getElementById('gameResult').style.display = 'none';
-            
-            const container = document.getElementById('gameContainer');
-            
-            // Generar corazones
-            gameInterval = setInterval(() => {
-                createHeart(container);
-            }, 800);
-            
-            // Timer
-            gameTimer = setInterval(() => {
-                timeLeft--;
-                document.getElementById('timer').textContent = timeLeft;
-                
-                if (timeLeft <= 0) {
-                    endGame();
+                // Vibración en móvil
+                if (navigator.vibrate) {
+                    navigator.vibrate([100, 50, 100]);
                 }
-            }, 1000);
+                
+                document.getElementById('quizResult').innerHTML = 
+                    '<div class="quiz-result">Exacto… eres peligrosa 😏</div>';
+                
+                setTimeout(() => {
+                    nextSection();
+                }, 3000);
+            } else {
+                event.target.style.background = 'rgba(100, 100, 100, 0.3)';
+                
+                setTimeout(() => {
+                    event.target.style.background = '';
+                    options.forEach(opt => opt.style.pointerEvents = 'all');
+                }, 1000);
+            }
         }
 
-        function createHeart(container) {
+        // ============================================
+        // MINI JUEGO: ATRAPA CORAZONES
+        // ============================================
+        function createFloatingHeart() {
+            const gameArea = document.getElementById('gameArea');
             const heart = document.createElement('div');
-            heart.className = 'heart-target';
+            heart.className = 'floating-heart';
             heart.textContent = '❤️';
-            heart.style.left = Math.random() * (container.clientWidth - 50) + 'px';
-            heart.style.top = Math.random() * (container.clientHeight - 100) + 50 + 'px';
+            heart.style.left = Math.random() * (gameArea.offsetWidth - 50) + 'px';
+            heart.style.bottom = '0px';
             
             heart.addEventListener('click', () => {
                 score++;
                 document.getElementById('score').textContent = score;
-                createExplosion(heart);
                 heart.remove();
-                vibrate(30);
                 
-                if (score >= 12) {
-                    endGame();
+                // Vibración
+                if (navigator.vibrate) {
+                    navigator.vibrate(50);
+                }
+                
+                // Efecto visual
+                createConfetti(
+                    parseFloat(heart.style.left) + 25,
+                    gameArea.offsetHeight - parseFloat(heart.style.bottom) - 25
+                );
+                
+                if (score >= 10) {
+                    endCatchGame(true);
                 }
             });
             
-            container.appendChild(heart);
+            gameArea.appendChild(heart);
             
-            // Remover corazón después de 3 segundos
             setTimeout(() => {
-                if (heart.parentNode) {
+                if (heart.parentElement) {
                     heart.remove();
                 }
             }, 3000);
         }
 
-        function createExplosion(element) {
-            const rect = element.getBoundingClientRect();
-            for (let i = 0; i < 5; i++) {
-                const particle = document.createElement('div');
-                particle.className = 'heart-explosion';
-                particle.textContent = '💖';
-                particle.style.left = rect.left + rect.width / 2 + 'px';
-                particle.style.top = rect.top + rect.height / 2 + 'px';
-                particle.style.fontSize = '20px';
-                document.body.appendChild(particle);
+        function startCatchGame() {
+            if (gameStarted) return;
+            gameStarted = true;
+            score = 0;
+            timeLeft = 15;
+            
+            document.getElementById('score').textContent = score;
+            document.getElementById('timer').textContent = timeLeft;
+            
+            // Generar corazones cada 500ms
+            heartInterval = setInterval(createFloatingHeart, 500);
+            
+            // Contador de tiempo
+            gameInterval = setInterval(() => {
+                timeLeft--;
+                document.getElementById('timer').textContent = timeLeft;
                 
-                setTimeout(() => particle.remove(), 600);
-            }
+                if (timeLeft <= 0) {
+                    endCatchGame(score >= 10);
+                }
+            }, 1000);
         }
 
-        function endGame() {
+        function endCatchGame(won) {
             clearInterval(gameInterval);
-            clearInterval(gameTimer);
+            clearInterval(heartInterval);
+            gameStarted = false;
             
-            // Limpiar corazones restantes
-            const hearts = document.querySelectorAll('.heart-target');
-            hearts.forEach(heart => heart.remove());
+            const gameArea = document.getElementById('gameArea');
+            gameArea.innerHTML = '';
             
             const resultDiv = document.getElementById('gameResult');
-            const resultText = document.getElementById('resultText');
-            const actionBtn = document.getElementById('gameActionBtn');
             
-            resultDiv.style.display = 'block';
-            
-            if (score >= 12) {
-                resultText.innerHTML = '¡Increíble! 🎉<br>Eres tan rápida como hermosa 😏';
-                actionBtn.textContent = 'Continuar ➜';
-                actionBtn.onclick = () => nextSection(12);
-                vibrate([100, 50, 100, 50, 100]);
+            if (won) {
+                resultDiv.innerHTML = `
+                    <div style="font-size: 2rem; color: var(--gold); margin-bottom: 2rem;">
+                        ¡Increíble! Atrapaste todo mi amor ❤️
+                    </div>
+                    <button class="btn" onclick="nextSection()">
+                        ¿Quieres ver tu premio final? 🎁
+                    </button>
+                `;
             } else {
-                resultText.innerHTML = `¡Casi! Atrapaste ${score}/12 ❤️<br>Pero no te preocupes... me atrapaste a mí 😘`;
-                actionBtn.textContent = 'Reintentar 🔄';
-                actionBtn.onclick = () => {
-                    document.getElementById('gameResult').style.display = 'none';
-                    startGame();
-                };
-                vibrate(200);
+                resultDiv.innerHTML = `
+                    <div style="font-size: 1.8rem; color: var(--rose); margin-bottom: 2rem;">
+                        ¡Casi! Pero igual te amo 💕
+                    </div>
+                    <button class="btn" onclick="startCatchGame()">
+                        Intentar de nuevo
+                    </button>
+                    <button class="btn" onclick="nextSection()" 
+                            style="margin-top: 1rem; background: rgba(255,255,255,0.2);">
+                        Continuar de todas formas
+                    </button>
+                `;
             }
         }
 
-        // Vibración (si está disponible)
-        function vibrate(pattern) {
-            if ('vibrate' in navigator) {
-                navigator.vibrate(pattern);
-            }
-        }
-
-        // Reiniciar experiencia
-        function restart() {
-            // Limpiar juego si está activo
-            if (gameInterval) clearInterval(gameInterval);
-            if (gameTimer) clearInterval(gameTimer);
-            
-            // Resetear todas las cajas de regalo
-            for (let i = 1; i <= 10; i++) {
-                const giftBox = document.querySelector(`#section${i} .gift-box`);
-                const content = document.getElementById(`content${i}`);
-                if (giftBox) {
-                    giftBox.classList.remove('opening');
-                    giftBox.style.display = 'block';
-                }
-                if (content) {
-                    content.classList.remove('revealed');
-                }
-            }
-            
-            // Volver al inicio
-            document.getElementById(`section${currentSection}`).classList.remove('active');
-            currentSection = 0;
-            document.getElementById('section0').classList.add('active');
-            updateProgress(0);
-            vibrate(100);
-        }
-
-        // Canvas de partículas
-        function initParticles() {
-            const canvas = document.getElementById('particles');
-            const ctx = canvas.getContext('2d');
-            
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-            
-            const particles = [];
-            const particleCount = 50;
-            
-            class Particle {
-                constructor() {
-                    this.reset();
-                }
+        // ============================================
+        // EFECTOS ESPECIALES
+        // ============================================
+        function createConfetti(x, y) {
+            for (let i = 0; i < 5; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti-heart';
+                confetti.textContent = ['❤️', '💕', '💖', '💗'][Math.floor(Math.random() * 4)];
+                confetti.style.left = x + 'px';
+                confetti.style.top = y + 'px';
+                document.body.appendChild(confetti);
                 
-                reset() {
-                    this.x = Math.random() * canvas.width;
-                    this.y = Math.random() * canvas.height;
-                    this.size = Math.random() * 3 + 1;
-                    this.speedX = Math.random() * 1 - 0.5;
-                    this.speedY = Math.random() * 1 - 0.5;
-                    this.opacity = Math.random() * 0.5 + 0.2;
-                }
-                
-                update() {
-                    this.x += this.speedX;
-                    this.y += this.speedY;
-                    
-                    if (this.x > canvas.width || this.x < 0 || this.y > canvas.height || this.y < 0) {
-                        this.reset();
-                    }
-                }
-                
-                draw() {
-                    ctx.fillStyle = `rgba(255, 105, 180, ${this.opacity})`;
-                    ctx.beginPath();
-                    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                    ctx.fill();
-                }
+                setTimeout(() => confetti.remove(), 3000);
             }
-            
-            for (let i = 0; i < particleCount; i++) {
-                particles.push(new Particle());
-            }
-            
-            function animate() {
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-                particles.forEach(particle => {
-                    particle.update();
-                    particle.draw();
-                });
-                requestAnimationFrame(animate);
-            }
-            
-            animate();
-            
-            // Redimensionar canvas
-            window.addEventListener('resize', () => {
-                canvas.width = window.innerWidth;
-                canvas.height = window.innerHeight;
-            });
         }
 
-        // Inicializar todo al cargar
+        function createConfettiRain() {
+            setInterval(() => {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti-heart';
+                confetti.textContent = ['❤️', '💕', '💖', '💗', '🔥'][Math.floor(Math.random() * 5)];
+                confetti.style.left = Math.random() * window.innerWidth + 'px';
+                confetti.style.top = '-50px';
+                document.body.appendChild(confetti);
+                
+                setTimeout(() => confetti.remove(), 3000);
+            }, 300);
+        }
+
+        // ============================================
+        // INICIALIZACIÓN
+        // ============================================
         window.addEventListener('load', () => {
-            initProgressBar();
+            resizeCanvas();
+            initParticles();
+            animateParticles();
+        });
+
+        window.addEventListener('resize', () => {
+            resizeCanvas();
             initParticles();
         });
 
-        // Prevenir zoom accidental en iOS
-        document.addEventListener('gesturestart', e => e.preventDefault());
-        document.addEventListener('touchmove', e => {
-            if (e.scale !== 1) {
+        // Prevenir zoom en móviles
+        document.addEventListener('touchmove', (e) => {
+            if (e.touches.length > 1) {
                 e.preventDefault();
             }
         }, { passive: false });
+
+        console.log('❤️ Experiencia interactiva cargada - Para Lidy 14/02/2026 🔥');
     </script>
 </body>
 </html>
