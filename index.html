@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Para Lidy ❤️ | 14 de Febrero 2026</title>
+    <meta name="description" content="Un regalo especial para Lidy">
+    <style>
+        /* Reset y base */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #ff1744;
+            --secondary: #f50057;
+            --dark: #0a0a0a;
+            --wine: #4a0e2e;
+            --rose: #ff4081;
+            --gold: #ffd700;
+        }
+
+        body {
+            font-family: 'Georgia', 'Times New Roman', serif;
+            overflow-x: hidden;
+            background: var(--dark);
+            color: #fff;
+            line-height: 1.6;
+        }
+
+        /* Canvas de partículas */
+        #particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* Fondo animado */
+        .background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            background: linear-gradient(135deg, 
+                var(--dark) 0%, 
+                var(--wine) 50%, 
+                #1a0a14 100%);
+            animation: bgShift 20s ease-in-out infinite;
+        }
+
+        @keyframes bgShift {
+            0%, 100% { filter: hue-rotate(0deg); }
+            50% { filter: hue-rotate(20deg); }
+        }
+
+        /* Contenedor principal */
+        .container {
+            position: relative;
+            z-index: 2;
+            min-height: 100vh;
+        }
+
+        /* Pantalla de bienvenida */
+        #welcome-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 20px;
+            z-index: 1000;
+            background: linear-gradient(135deg, var(--dark), var(--wine));
+            transition: opacity 1s ease, transform 1s ease;
+        }
+
+        #welcome-screen.hidden {
+            opacity: 0;
+            transform: scale(1.1);
+            pointer-events: none;
+        }
+
+        .welcome-title {
+            font-size: clamp(2rem, 8vw, 4rem);
+            font-weight: 300;
+            margin-bottom: 2rem;
+            opacity: 0;
+            animation: fadeInUp 1.5s ease forwards;
+            text-shadow: 0 0 20px rgba(255, 64, 129, 0.5);
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+        }
+
+        .welcome-subtitle {
+            font-size: clamp(1.2rem, 4vw, 2rem);
+            margin-bottom: 3rem;
+            opacity: 0;
+            animation: fadeInUp 1.5s ease 0.5s forwards;
+            font-style: italic;
+            color: var(--rose);
+        }
+
+        .start-button {
+            padding: 1.5rem 3rem;
+            font-size: clamp(1.2rem, 3vw, 1.5rem);
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            border: none;
+            border-radius: 50px;
+            color: white;
+            cursor: pointer;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            opacity: 0;
+            animation: fadeInUp 1.5s ease 1s forwards, pulse 2s ease-in-out 2s infinite;
+            box-shadow: 0 0 30px rgba(255, 23, 68, 0.6);
+            transition: all 0.3s ease;
+            font-family: 'Georgia', serif;
+        }
+
+        .start-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 50px rgba(255, 23, 68, 0.9);
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        /* Contenido principal */
+        #main-content {
+            opacity: 0;
+            transition: opacity 1.5s ease;
+            padding-top: 100vh;
+        }
+
+        #main-content.visible {
+            opacity: 1;
+        }
+
+        /* Sección hero */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .hero-title {
+            font-size: clamp(2.5rem, 10vw, 5rem);
+            margin-bottom: 2rem;
+            background: linear-gradient(45deg, var(--rose), var(--gold));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: shimmer 3s ease-in-out infinite;
+        }
+
+        @keyframes shimmer {
+            0%, 100% { filter: brightness(1); }
+            50% { filter: brightness(1.3); }
+        }
+
+        /* Tarjetas de regalos */
+        .gift-section {
+            padding: 4rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .gift-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 3rem 2rem;
+            margin: 3rem 0;
+            border: 1px solid rgba(255, 64, 129, 0.2);
+            opacity: 0;
+            transform: translateY(50px) rotateX(10deg);
+            transition: all 0.6s ease;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .gift-card.visible {
+            opacity: 1;
+            transform: translateY(0) rotateX(0);
+        }
+
+        .gift-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 60px rgba(255, 23, 68, 0.3);
+            border-color: var(--rose);
+        }
+
+        .gift-number {
+            font-size: 4rem;
+            font-weight: bold;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+        }
+
+        .gift-title {
+            font-size: clamp(1.8rem, 5vw, 2.5rem);
+            margin-bottom: 1.5rem;
+            color: var(--rose);
+            text-shadow: 0 0 10px rgba(255, 64, 129, 0.3);
+        }
+
+        .gift-description {
+            font-size: clamp(1.2rem, 3vw, 1.5rem);
+            line-height: 1.8;
+            font-style: italic;
+            color: #f0f0f0;
+        }
+
+        /* Sección final */
+        .finale {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 2rem;
+            position: relative;
+        }
+
+        .finale-title {
+            font-size: clamp(2rem, 8vw, 4rem);
+            margin-bottom: 2rem;
+            opacity: 0;
+            animation: finaleFade 2s ease forwards;
+            text-shadow: 0 0 30px rgba(255, 23, 68, 0.8);
+        }
+
+        .finale-message {
+            font-size: clamp(1.5rem, 5vw, 2.5rem);
+            line-height: 1.8;
+            max-width: 800px;
+            opacity: 0;
+            animation: finaleFade 2s ease 0.5s forwards;
+            font-style: italic;
+        }
+
+        @keyframes finaleFade {
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+        }
+
+        /* Corazones flotantes */
+        .heart {
+            position: fixed;
+            font-size: 2rem;
+            color: var(--rose);
+            opacity: 0;
+            pointer-events: none;
+            animation: floatHeart 4s ease-in-out forwards;
+        }
+
+        @keyframes floatHeart {
+            0% {
+                opacity: 0;
+                transform: translateY(0) rotate(0deg);
+            }
+            10% {
+                opacity: 0.8;
+            }
+            90% {
+                opacity: 0.8;
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(-100vh) rotate(360deg);
+            }
+        }
+
+        /* Scroll indicator */
+        .scroll-indicator {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 100;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .scroll-indicator.visible {
+            opacity: 1;
+        }
+
+        .scroll-arrow {
+            width: 30px;
+            height: 50px;
+            border: 2px solid var(--rose);
+            border-radius: 25px;
+            position: relative;
+        }
+
+        .scroll-arrow::before {
+            content: '';
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 6px;
+            height: 6px;
+            background: var(--rose);
+            border-radius: 50%;
+            animation: scrollDot 2s ease-in-out infinite;
+        }
+
+        @keyframes scrollDot {
+            0%, 100% {
+                top: 10px;
+                opacity: 1;
+            }
+            50% {
+                top: 30px;
+                opacity: 0.5;
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .gift-card {
+                padding: 2rem 1.5rem;
+                margin: 2rem 0;
+            }
+            
+            .gift-number {
+                font-size: 3rem;
+            }
+        }
+
+        /* Efectos de glow */
+        .glow {
+            animation: glow 2s ease-in-out infinite;
+        }
+
+        @keyframes glow {
+            0%, 100% {
+                text-shadow: 0 0 10px rgba(255, 64, 129, 0.5),
+                             0 0 20px rgba(255, 64, 129, 0.3);
+            }
+            50% {
+                text-shadow: 0 0 20px rgba(255, 64, 129, 0.8),
+                             0 0 40px rgba(255, 64, 129, 0.5);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Fondo animado -->
+    <div class="background"></div>
+    
+    <!-- Canvas de partículas -->
+    <canvas id="particles"></canvas>
+
+    <!-- Audio oculto -->
+    <audio id="background-music" preload="auto">
+        <source src="track.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- Pantalla de bienvenida -->
+    <div id="welcome-screen">
+        <h1 class="welcome-title">Lidy 💋</h1>
+        <p class="welcome-subtitle">Este 14 de febrero no es cualquier día…<br>Es nuestro día.</p>
+        <button class="start-button" id="start-btn">Haz click aquí y prepárate 🔥</button>
+    </div>
+
+    <!-- Contenido principal -->
+    <div id="main-content">
+        <!-- Hero Section -->
+        <section class="hero">
+            <h1 class="hero-title glow">Para Ti, Lidy ❤️</h1>
+        </section>
+
+        <!-- Sección de regalos -->
+        <div class="gift-section">
+            <div class="gift-card" data-index="0">
+                <div class="gift-number">01</div>
+                <h2 class="gift-title">Chocolate Turín Masterpieces</h2>
+                <p class="gift-description">Los compré porque se ven buenos… pero tú estás mucho mejor.</p>
+            </div>
+
+            <div class="gift-card" data-index="1">
+                <div class="gift-number">02</div>
+                <h2 class="gift-title">Pijama</h2>
+                <p class="gift-description">Me encanta cuando la usas… pero más cuando no dura mucho puesta.</p>
+            </div>
+
+            <div class="gift-card" data-index="2">
+                <div class="gift-number">03</div>
+                <h2 class="gift-title">Peluche Tristeza</h2>
+                <p class="gift-description">Dicen que se parece a Tristeza… pero tú eres mi Alegría favorita.</p>
+            </div>
+
+            <div class="gift-card" data-index="3">
+                <div class="gift-number">04</div>
+                <h2 class="gift-title">Forma Klein</h2>
+                <p class="gift-description">Como esta forma… lo nuestro no tiene principio ni fin.</p>
+            </div>
+
+            <div class="gift-card" data-index="4">
+                <div class="gift-number">05</div>
+                <h2 class="gift-title">Calzón</h2>
+                <p class="gift-description">Porque el arte también se modela… y tú eres mi obra favorita.</p>
+            </div>
+
+            <div class="gift-card" data-index="5">
+                <div class="gift-number">06</div>
+                <h2 class="gift-title">Crema Tono Natural</h2>
+                <p class="gift-description">Para que sigas brillando… aunque ya iluminas todo.</p>
+            </div>
+
+            <div class="gift-card" data-index="6">
+                <div class="gift-number">07</div>
+                <h2 class="gift-title">Baby Doll</h2>
+                <p class="gift-description">Espero que te quede perfecto… aunque sé que lo perfecto ya eres tú.</p>
+            </div>
+
+            <div class="gift-card" data-index="7">
+                <div class="gift-number">08</div>
+                <h2 class="gift-title">Calcetas Imán</h2>
+                <p class="gift-description">Porque siempre terminamos juntos… aunque intentemos separarnos.</p>
+            </div>
+
+            <div class="gift-card" data-index="8">
+                <div class="gift-number">09</div>
+                <h2 class="gift-title">Isdin Nails</h2>
+                <p class="gift-description">Para que tus uñas crezcan… y me sigas marcando el corazón.</p>
+            </div>
+
+            <div class="gift-card" data-index="9">
+                <div class="gift-number">10</div>
+                <h2 class="gift-title">Libro Carpe Diem</h2>
+                <p class="gift-description">Porque contigo quiero vivir el presente… una y otra vez.</p>
+            </div>
+        </div>
+
+        <!-- Sección final -->
+        <section class="finale">
+            <h1 class="finale-title">Lidy…</h1>
+            <p class="finale-message">
+                Tu sonrisa me enamora… pero tu energía me vuelve loco.<br><br>
+                <span class="glow">Feliz 14 de febrero ❤️🔥</span>
+            </p>
+        </section>
+    </div>
+
+    <!-- Scroll indicator -->
+    <div class="scroll-indicator" id="scroll-indicator">
+        <div class="scroll-arrow"></div>
+    </div>
+
+    <script>
+        // ============================================
+        // CONFIGURACIÓN Y VARIABLES GLOBALES
+        // ============================================
+        const audio = document.getElementById('background-music');
+        const welcomeScreen = document.getElementById('welcome-screen');
+        const mainContent = document.getElementById('main-content');
+        const startBtn = document.getElementById('start-btn');
+        const scrollIndicator = document.getElementById('scroll-indicator');
+        const SONG_DURATION = 150000; // 2:30 en milisegundos
+
+        let hasStarted = false;
+        let animationFrame;
+
+        // ============================================
+        // SISTEMA DE PARTÍCULAS
+        // ============================================
+        const canvas = document.getElementById('particles');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 3 + 1;
+                this.speedX = Math.random() * 1 - 0.5;
+                this.speedY = Math.random() * 1 - 0.5;
+                this.opacity = Math.random() * 0.5 + 0.2;
+            }
+
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+
+                if (this.x > canvas.width) this.x = 0;
+                if (this.x < 0) this.x = canvas.width;
+                if (this.y > canvas.height) this.y = 0;
+                if (this.y < 0) this.y = canvas.height;
+            }
+
+            draw() {
+                ctx.fillStyle = `rgba(255, 64, 129, ${this.opacity})`;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        function initParticles() {
+            particles = [];
+            const particleCount = window.innerWidth < 768 ? 50 : 100;
+            for (let i = 0; i < particleCount; i++) {
+                particles.push(new Particle());
+            }
+        }
+
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(particle => {
+                particle.update();
+                particle.draw();
+            });
+            animationFrame = requestAnimationFrame(animateParticles);
+        }
+
+        // ============================================
+        // CORAZONES FLOTANTES
+        // ============================================
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.className = 'heart';
+            heart.textContent = '❤️';
+            heart.style.left = Math.random() * window.innerWidth + 'px';
+            heart.style.bottom = '-50px';
+            document.body.appendChild(heart);
+
+            setTimeout(() => {
+                heart.remove();
+            }, 4000);
+        }
+
+        function startHeartRain() {
+            setInterval(createHeart, 800);
+        }
+
+        // ============================================
+        // PAGE VISIBILITY API - PAUSA/REPRODUCCIÓN
+        // ============================================
+        document.addEventListener('visibilitychange', () => {
+            if (hasStarted) {
+                if (document.hidden) {
+                    audio.pause();
+                } else {
+                    audio.play().catch(e => console.log('Error al reanudar:', e));
+                }
+            }
+        });
+
+        // ============================================
+        // INTERSECTION OBSERVER PARA ANIMACIONES
+        // ============================================
+        const observerOptions = {
+            threshold: 0.2,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        // Observar todas las tarjetas
+        document.querySelectorAll('.gift-card').forEach(card => {
+            observer.observe(card);
+        });
+
+        // ============================================
+        // INICIO DE LA EXPERIENCIA
+        // ============================================
+        startBtn.addEventListener('click', async () => {
+            hasStarted = true;
+
+            // Reproducir audio
+            try {
+                await audio.play();
+            } catch (e) {
+                console.log('Error al reproducir audio:', e);
+            }
+
+            // Transición de pantalla
+            welcomeScreen.classList.add('hidden');
+            
+            setTimeout(() => {
+                mainContent.classList.add('visible');
+                scrollIndicator.classList.add('visible');
+                
+                // Scroll suave a la primera sección
+                setTimeout(() => {
+                    window.scrollTo({
+                        top: window.innerHeight,
+                        behavior: 'smooth'
+                    });
+                }, 500);
+            }, 1000);
+
+            // Iniciar lluvia de corazones
+            startHeartRain();
+
+            // Ocultar scroll indicator después de 5 segundos
+            setTimeout(() => {
+                scrollIndicator.classList.remove('visible');
+            }, 5000);
+
+            // Activar animaciones finales cerca del final de la canción
+            setTimeout(() => {
+                document.querySelector('.finale').scrollIntoView({ 
+                    behavior: 'smooth' 
+                });
+            }, SONG_DURATION - 15000); // 15 segundos antes del final
+        });
+
+        // ============================================
+        // SCROLL SUAVE Y EFECTOS
+        // ============================================
+        let ticking = false;
+
+        window.addEventListener('scroll', () => {
+            if (!ticking) {
+                window.requestAnimationFrame(() => {
+                    const scrolled = window.pageYOffset;
+                    const heroTitle = document.querySelector('.hero-title');
+                    
+                    if (heroTitle) {
+                        const opacity = 1 - (scrolled / window.innerHeight);
+                        heroTitle.style.opacity = Math.max(0, opacity);
+                    }
+
+                    ticking = false;
+                });
+                ticking = true;
+            }
+        });
+
+        // ============================================
+        // INICIALIZACIÓN
+        // ============================================
+        window.addEventListener('load', () => {
+            resizeCanvas();
+            initParticles();
+            animateParticles();
+        });
+
+        window.addEventListener('resize', () => {
+            resizeCanvas();
+            initParticles();
+        });
+
+        // Prevenir que el audio se pause por inactividad
+        audio.addEventListener('ended', () => {
+            console.log('Canción finalizada');
+        });
+
+        // ============================================
+        // EFECTOS ADICIONALES DE SCROLL
+        // ============================================
+        window.addEventListener('scroll', () => {
+            const cards = document.querySelectorAll('.gift-card');
+            const scrolled = window.pageYOffset;
+
+            cards.forEach((card, index) => {
+                const cardTop = card.offsetTop;
+                const cardHeight = card.offsetHeight;
+                const windowHeight = window.innerHeight;
+
+                if (scrolled > cardTop - windowHeight + cardHeight / 2) {
+                    card.style.animationDelay = `${index * 0.1}s`;
+                }
+            });
+        });
+
+        // ============================================
+        // OPTIMIZACIÓN DE RENDIMIENTO
+        // ============================================
+        // Reducir partículas en móviles
+        if (window.innerWidth < 768) {
+            particles = particles.slice(0, 30);
+        }
+
+        // Pausar animaciones cuando no está visible
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden) {
+                cancelAnimationFrame(animationFrame);
+            } else {
+                animateParticles();
+            }
+        });
+
+        console.log('🔥 Sitio cargado - Listo para el 14 de febrero 2026 ❤️');
+    </script>
+</body>
+</html>
